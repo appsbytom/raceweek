@@ -1,17 +1,22 @@
-export type RacesResponse = {
-  raceresults: RaceResponse[]
+export type EventsResponse = {
+  events: EventResponse[]
 }
 
-type RaceResponse = {
-  type: Type
+type EventResponse = {
+  type: EventType
   meetingName: string
   meetingKey: string
-  meetingStartDate: string
+  status: RaceStatus
 }
 
-export enum Type {
+export enum EventType {
   RACE = 'race',
   TESTING = 'fom-testing'
+}
+
+enum RaceStatus {
+  UPCOMING = 'upcoming',
+  COMPLETED = 'completed'
 }
 
 export type SessionsResponse = {
@@ -19,7 +24,6 @@ export type SessionsResponse = {
 }
 
 type SessionResponse = {
-  state: string
   session: SessionType
   description: string
   startTime: string
@@ -39,10 +43,10 @@ export type Race = {
   meetingName: string
   meetingKey: string
   sessions: Session[]
+  status: RaceStatus
 }
 
 export type Session = {
-  state: string
   description: string
   startTime: string
 }
