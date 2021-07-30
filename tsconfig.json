@@ -20,7 +20,10 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/types/*": ["types/*"]
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"],
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
     }
   },
   "exclude": ["node_modules", ".next"],
