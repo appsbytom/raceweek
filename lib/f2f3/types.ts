@@ -7,38 +7,14 @@ type RaceResponse = {
   CountryName: string
   CircuitShortName: string
   Sessions: SessionResponse[]
-  State: RaceState
-}
-
-enum RaceState {
-  PRE_RACE = 'PRE-RACE',
-  POST_RACE = 'POST-RACE'
+  Provisional: boolean
+  State: string
 }
 
 type SessionResponse = {
   SessionId: number
-  SessionCode: SessionCode
+  SessionCode: string
   SessionName: string
   Unconfirmed: boolean
   SessionStartTime: string
-}
-
-export enum SessionCode {
-  PRACTICE = 'PRACTICE',
-  QUALIFYING = 'QUALIFYING',
-  RACE = 'RESULT'
-}
-
-export type Race = {
-  id: number
-  name: string
-  sessions: Session[]
-  state: RaceState
-}
-
-type Session = {
-  id: number
-  name: string
-  unconfirmed: boolean
-  startTime: string
 }
