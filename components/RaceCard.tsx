@@ -30,12 +30,10 @@ const RaceCard = ({ race: { name, sessions, status, provisional } }: Props) => {
             <h2>{name}</h2>
             <small>{sessionDateRange}</small>
           </Disclosure.Button>
-          <Disclosure.Panel className="pb-4 pr-4 pl-11">
-            <div className="space-y-1">
-              {sessions.map(session => (
-                <h3 key={session.id} className="text-sm">{session.name}: {formatToTimeWithTimezone(session.startTime)}</h3>
-              ))}
-            </div>
+          <Disclosure.Panel className="pb-4 pr-4 pl-11 space-y-1">
+            {sessions.map(session => (
+              <h3 key={session.id} className="text-sm">{session.name}: {formatToTimeWithTimezone(session.startTime)} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}</h3>
+            ))}
           </Disclosure.Panel>
         </>
       )}

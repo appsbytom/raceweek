@@ -5,7 +5,6 @@ export type RacesResponse = {
 type RaceResponse = {
   RaceId: number
   CountryName: string
-  CircuitShortName: string
   Sessions: SessionResponse[]
   Provisional: boolean
   State: string
