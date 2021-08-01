@@ -12,6 +12,7 @@ const Nav = () => (
     <NavLink href="/f1" text="F1" />
     <NavLink href="/f2" text="F2" />
     <NavLink href="/f3" text="F3" />
+    <NavLink href="/wseries" text="W Series" />
   </nav>
 )
 

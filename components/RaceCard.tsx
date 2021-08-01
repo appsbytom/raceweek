@@ -10,7 +10,8 @@ type Props = {
 
 const RaceCard = ({ race: { name, sessions, status, provisional } }: Props) => {
   const { 0: firstSession, [sessions.length - 1]: lastSession} = sessions
-  const sessionDateRange = `${formatToDate(firstSession.startTime)} - ${formatToDate(lastSession.startTime)}`;
+  const firstSessionDate = formatToDate(firstSession.startTime)
+  const sessionDateRange = sessions.length > 1 ? `${firstSessionDate} - ${formatToDate(lastSession.startTime)}` : firstSessionDate;
 
   if (status === RaceStatus.COMPLETED || provisional) {
     return (
