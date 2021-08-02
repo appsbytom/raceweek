@@ -1,5 +1,5 @@
 import { Race } from '@/types/race'
-import data from '../_data/wseries'
+import data from '../_data/fe'
 
 export const getRaces = (): Race[] => {
   return data.map(race => ({
