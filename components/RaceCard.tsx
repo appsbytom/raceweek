@@ -3,15 +3,16 @@ import { formatToDate, formatToTimeWithTimezone } from '@/utils/dateTimeFormatte
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
+import dayjs from 'dayjs'
 
 type Props = {
   race: Race
 }
 
 const RaceCard = ({ race: { name, sessions, status, provisional } }: Props) => {
-  const { 0: firstSession, [sessions.length - 1]: lastSession} = sessions
-  const firstSessionDate = formatToDate(firstSession.startTime)
-  const sessionDateRange = sessions.length > 1 ? `${firstSessionDate} - ${formatToDate(lastSession.startTime)}` : firstSessionDate;
+  const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
+  const firstSessionDate = formatToDate(firstSessionStartTime)
+  const sessionDateRange = (sessions.length > 1 && !dayjs(firstSessionStartTime).isSame(lastSessionStartTime, 'day')) ? `${firstSessionDate} - ${formatToDate(lastSessionStartTime)}` : firstSessionDate;
 
   if (status === RaceStatus.COMPLETED || provisional) {
     return (
