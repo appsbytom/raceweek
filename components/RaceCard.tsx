@@ -7,9 +7,10 @@ import dayjs from 'dayjs'
 
 type Props = {
   race: Race
+  isNextRace: boolean
 }
 
-const RaceCard = ({ race: { name, sessions, status, provisional } }: Props) => {
+const RaceCard = ({ race: { name, sessions, status, provisional }, isNextRace }: Props) => {
   const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
   const firstSessionDate = formatToDate(firstSessionStartTime)
   const sessionDateRange = (sessions.length > 1 && !dayjs(firstSessionStartTime).isSame(lastSessionStartTime, 'day')) ? `${firstSessionDate} - ${formatToDate(lastSessionStartTime)}` : firstSessionDate;
@@ -24,7 +25,7 @@ const RaceCard = ({ race: { name, sessions, status, provisional } }: Props) => {
   }
 
   return (
-    <Disclosure as="div" className="border border-gray-200 rounded hover:shadow" defaultOpen={true}>
+    <Disclosure as="div" className="border border-gray-200 rounded hover:shadow" defaultOpen={isNextRace}>
       {({ open }) => (
         <>
           <Disclosure.Button className="flex items-center p-4 space-x-2 w-full">
