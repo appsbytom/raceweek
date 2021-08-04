@@ -1,4 +1,4 @@
-import { Race, RaceStatus } from '@/types/race'
+import { Race } from '@/types/race'
 import { formatToDate, formatToTimeWithTimezone } from '@/utils/dateTimeFormatter'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -10,12 +10,12 @@ type Props = {
   isNextRace: boolean
 }
 
-const RaceCard = ({ race: { name, sessions, status, provisional }, isNextRace }: Props) => {
-  const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
+const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) => {
+  const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime, endTime: lastSessionEndTime }} = sessions
   const firstSessionDate = formatToDate(firstSessionStartTime)
   const sessionDateRange = (sessions.length > 1 && !dayjs(firstSessionStartTime).isSame(lastSessionStartTime, 'day')) ? `${firstSessionDate} - ${formatToDate(lastSessionStartTime)}` : firstSessionDate;
 
-  if (status === RaceStatus.COMPLETED || provisional) {
+  if (dayjs(lastSessionEndTime).isBefore(dayjs()) || provisional) {
     return (
       <div className={classNames('border border-gray-200 rounded flex items-center p-4 space-x-2', { 'line-through': !provisional })}>
         <h2>{name}</h2>

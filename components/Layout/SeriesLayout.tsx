@@ -1,4 +1,5 @@
-import { Race, RaceStatus } from '@/types/race'
+import { Race } from '@/types/race'
+import dayjs from 'dayjs'
 import RaceCard from '../RaceCard'
 import Layout from './Layout'
 
@@ -8,7 +9,7 @@ type Props = {
 }
 
 const SeriesLayout = ({ disclaimer, races }: Props) => {
-  const { 0: nextRace } = races.filter(race => race.status !== RaceStatus.COMPLETED)
+  const { 0: nextRace } = races.filter(race => dayjs(race.sessions[race.sessions.length - 1].endTime).isSameOrAfter(dayjs()))
 
   return (
     <Layout disclaimer={disclaimer}>

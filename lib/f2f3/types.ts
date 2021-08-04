@@ -7,7 +7,6 @@ type RaceResponse = {
   CountryName: string
   Sessions: SessionResponse[]
   Provisional: boolean
-  State: string
 }
 
 type SessionResponse = {
@@ -16,4 +15,5 @@ type SessionResponse = {
   SessionName: string
   Unconfirmed: boolean
   SessionStartTime: string
+  SessionEndTime: string
 }

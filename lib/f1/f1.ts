@@ -13,7 +13,6 @@ export const getRaces = async (): Promise<Race[]> => {
       id: race.meetingKey,
       name: race.meetingName,
       sessions: await getSessions(race.meetingKey),
-      status: race.status,
       provisional: race.meetingName === 'TBC'
     })))
 }
@@ -28,6 +27,7 @@ const getSessions = async (id): Promise<Session[]> => {
       id: `${id}-${session.session}`,
       name: session.description,
       startTime: `${session.startTime}${session.gmtOffset}`,
+      endTime: `${session.endTime}${session.gmtOffset}`,
       unconfirmed: false
     }))
 }

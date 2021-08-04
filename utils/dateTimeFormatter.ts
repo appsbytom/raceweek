@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
+dayjs.extend(isSameOrAfter)
 dayjs.extend(timezone)
 dayjs.extend(utc)
 

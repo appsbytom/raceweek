@@ -3,13 +3,6 @@ export type Race = {
   name: string
   sessions: Session[]
   provisional: boolean
-  status: RaceStatus
-}
-
-export enum RaceStatus {
-  UPCOMING = 'upcoming',
-  COMPLETED = 'completed',
-  ONGOING = 'ongoing'
 }
 
 export type Session = {
@@ -17,4 +10,5 @@ export type Session = {
   name: string
   unconfirmed: boolean
   startTime: string
+  endTime: string
 }
