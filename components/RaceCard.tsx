@@ -11,15 +11,15 @@ type Props = {
 }
 
 const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) => {
-  const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime, endTime: lastSessionEndTime }} = sessions
+  const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
   const firstSessionDate = formatToDate(firstSessionStartTime)
   const sessionDateRange = (sessions.length > 1 && !dayjs(firstSessionStartTime).isSame(lastSessionStartTime, 'day')) ? `${firstSessionDate} - ${formatToDate(lastSessionStartTime)}` : firstSessionDate;
 
-  if (dayjs(lastSessionEndTime).isBefore(dayjs()) || provisional) {
+  if (provisional) {
     return (
-      <div className={classNames('border border-gray-200 rounded flex items-center p-4 space-x-2', { 'line-through': !provisional })}>
+      <div className="border border-gray-200 rounded flex items-center p-4 space-x-2">
         <h2>{name}</h2>
-        <small>{provisional ? 'No date set' : sessionDateRange}</small>
+        <small>No date set</small>
       </div>
     )
   }

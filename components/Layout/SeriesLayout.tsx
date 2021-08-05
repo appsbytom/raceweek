@@ -9,12 +9,12 @@ type Props = {
 }
 
 const SeriesLayout = ({ disclaimer, races }: Props) => {
-  const { 0: nextRace } = races.filter(race => dayjs(race.sessions[race.sessions.length - 1].endTime).isSameOrAfter(dayjs()))
+  const futureRaces = races.filter(race => dayjs(race.sessions[race.sessions.length - 1].endTime).isSameOrAfter(dayjs()) || race.provisional)
 
   return (
     <Layout disclaimer={disclaimer}>
       <div className="space-y-4">
-        {races.map(race => <RaceCard key={race.id} race={race} isNextRace={nextRace.id === race.id} />)}
+        {futureRaces.map(race => <RaceCard key={race.id} race={race} isNextRace={race.id === futureRaces[0].id} />)}
       </div>
     </Layout>
   )

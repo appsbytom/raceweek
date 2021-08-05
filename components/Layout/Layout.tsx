@@ -8,9 +8,9 @@ type Props = {
 }
 
 const Layout = ({ children, disclaimer }: Props) => (
-  <div className="px-5 pb-6">
+  <div className="px-5 pb-6 min-h-screen flex flex-col">
     <Nav />
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl w-full mx-auto flex flex-col flex-grow justify-between">
       {children}
       {disclaimer && <Footer disclaimer={disclaimer} />}
     </div>
