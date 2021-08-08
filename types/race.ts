@@ -3,6 +3,15 @@ export type Race = {
   name: string
   sessions: Session[]
   provisional: boolean
+  series: Series
+}
+
+export enum Series {
+  F1= 'f1',
+  F2= 'f2',
+  F3= 'f3',
+  FE= 'fe',
+  WSeries= 'wseries'
 }
 
 export type Session = {

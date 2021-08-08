@@ -1,4 +1,6 @@
-import { Race } from '@/types/race'
+import { Race, Series } from '@/types/race'
+
+const series = Series.FE
 
 const practice1Session = {
   id: 'p-1',
@@ -31,7 +33,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-02-26T16:00:00+03:00', endTime: '2021-02-26T17:00:00+03:00' },
       { ...raceSession, startTime: '2021-02-26T20:03:00+03:00', endTime: '2021-02-26T20:53:00+03:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'diriyah-2',
@@ -41,7 +44,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-02-27T16:00:00+03:00', endTime: '2021-02-27T17:00:00+03:00' },
       { ...raceSession, startTime: '2021-02-27T20:03:00+03:00', endTime: '2021-02-27T20:53:00+03:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'rome-1',
@@ -52,7 +56,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-04-10T12:00:00+02:00', endTime: '2021-04-10T13:00:00+02:00' },
       { ...raceSession, startTime: '2021-04-10T16:04:00+02:00', endTime: '2021-04-10T16:54:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'rome-2',
@@ -62,7 +67,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-04-11T09:00:00+02:00', endTime: '2021-04-11T10:00:00+02:00' },
       { ...raceSession, startTime: '2021-04-11T13:04:00+02:00', endTime: '2021-04-11T13:54:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'valencia-1',
@@ -73,7 +79,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-04-24T11:00:00+02:00', endTime: '2021-04-24T12:00:00+02:00' },
       { ...raceSession, startTime: '2021-04-24T15:04:00+02:00', endTime: '2021-04-24T15:54:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'valencia-2',
@@ -83,7 +90,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-04-25T10:00:00+02:00', endTime: '2021-04-25T11:00:00+02:00' },
       { ...raceSession, startTime: '2021-04-25T14:04:00+02:00', endTime: '2021-04-25T14:54:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'monaco',
@@ -94,7 +102,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-05-08T12:00:00+02:00', endTime: '2021-05-08T13:00:00+02:00' },
       { ...raceSession, startTime: '2021-05-08T16:04:00+02:00', endTime: '2021-05-08T16:54:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'puebla-1',
@@ -105,7 +114,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-06-19T12:00:00-05:00', endTime: '2021-06-19T13:00:00-05:00' },
       { ...raceSession, startTime: '2021-06-19T16:04:00-05:00', endTime: '2021-06-19T16:54:00-05:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'puebla-2',
@@ -115,7 +125,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-06-20T12:00:00-05:00', endTime: '2021-06-20T13:00:00-05:00' },
       { ...raceSession, startTime: '2021-06-20T16:04:00-05:00', endTime: '2021-06-20T16:54:00-05:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'new-york-1',
@@ -126,7 +137,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-07-10T12:30:00-04:00', endTime: '2021-07-10T13:30:00-04:00' },
       { ...raceSession, startTime: '2021-07-10T16:34:00-04:00', endTime: '2021-07-10T17:24:00-04:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'new-york-2',
@@ -136,7 +148,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-07-11T09:30:00-04:00', endTime: '2021-07-11T10:30:00-04:00' },
       { ...raceSession, startTime: '2021-07-11T13:34:00-04:00', endTime: '2021-07-11T14:24:00-04:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'london-1',
@@ -147,7 +160,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-07-24T11:00:00+01:00', endTime: '2021-07-24T12:00:00+01:00' },
       { ...raceSession, startTime: '2021-07-24T15:03:00+01:00', endTime: '2021-07-24T15:53:00+01:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'london-2',
@@ -157,7 +171,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-07-25T10:00:00+01:00', endTime: '2021-07-25T11:00:00+01:00' },
       { ...raceSession, startTime: '2021-07-25T14:04:00+01:00', endTime: '2021-07-25T14:54:00+01:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'berlin-1',
@@ -168,7 +183,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-08-14T10:00:00+02:00', endTime: '2021-08-14T11:00:00+02:00' },
       { ...raceSession, startTime: '2021-08-14T14:04:00+02:00', endTime: '2021-08-14T15:00:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   },
   {
     id: 'berlin-2',
@@ -179,7 +195,8 @@ const races: Race[] = [
       { ...qualifyingSession, startTime: '2021-08-15T11:30:00+02:00', endTime: '2021-08-15T12:30:00+02:00' },
       { ...raceSession, startTime: '2021-08-15T15:34:00+02:00', endTime: '2021-08-15T16:30:00+02:00' }
     ],
-    provisional: false
+    provisional: false,
+    series
   }
 ]
 

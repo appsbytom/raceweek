@@ -1,5 +1,5 @@
 import { Race } from '@/types/race'
-import dayjs from 'dayjs'
+import { getFutureRaces } from '@/utils/races'
 import RaceCard from '../RaceCard'
 import Layout from './Layout'
 
@@ -9,7 +9,7 @@ type Props = {
 }
 
 const SeriesLayout = ({ disclaimer, races }: Props) => {
-  const futureRaces = races.filter(race => dayjs(race.sessions[race.sessions.length - 1].endTime).isSameOrAfter(dayjs()) || race.provisional)
+  const futureRaces = getFutureRaces(races)
 
   return (
     <Layout disclaimer={disclaimer}>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Race, Session } from '@/types/race'
+import { Race, Series, Session } from '@/types/race'
 import { EventsResponse, SessionsResponse } from './types'
 
 const f1Client = axios.create({ baseURL: 'https://api.formula1.com/v1', headers: { apikey: process.env.F1_KEY }})
@@ -13,7 +13,8 @@ export const getRaces = async (): Promise<Race[]> => {
       id: race.meetingKey,
       name: race.meetingName,
       sessions: await getSessions(race.meetingKey),
-      provisional: race.meetingName === 'TBC'
+      provisional: race.meetingName === 'TBC',
+      series: Series.F1
     })))
 }
 

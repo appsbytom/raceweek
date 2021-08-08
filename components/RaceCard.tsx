@@ -1,9 +1,10 @@
 import { Race } from '@/types/race'
-import { formatToDate, formatToTimeWithTimezone } from '@/utils/dateTimeFormatter'
+import { formatToDate, formatToDateTime } from '@/utils/dateTimeFormatter'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import Unconfirmed from './Unconfirmed'
 
 type Props = {
   race: Race
@@ -35,7 +36,7 @@ const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) 
           </Disclosure.Button>
           <Disclosure.Panel className="pb-4 pr-4 pl-11 space-y-1">
             {sessions.map(session => (
-              <h3 key={session.id} className="text-sm">{session.name}: {formatToTimeWithTimezone(session.startTime)} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}</h3>
+              <h3 key={session.id} className="text-sm">{session.name}: {formatToDateTime(session.startTime)} <Unconfirmed unconfirmed={session.unconfirmed} /></h3>
             ))}
           </Disclosure.Panel>
         </>
