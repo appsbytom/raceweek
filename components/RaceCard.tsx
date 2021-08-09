@@ -36,7 +36,9 @@ const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) 
           </Disclosure.Button>
           <Disclosure.Panel className="pb-4 pr-4 pl-11 space-y-1">
             {sessions.map(session => (
-              <h3 key={session.id} className="text-sm">{session.name}: {formatToDateTime(session.startTime)} <Unconfirmed unconfirmed={session.unconfirmed} /></h3>
+              <h3 key={session.id} className={classNames('text-sm', { 'line-through': dayjs(session.endTime).isBefore(dayjs()) })}>
+                {session.name}: {formatToDateTime(session.startTime)} <Unconfirmed unconfirmed={session.unconfirmed} />
+              </h3>
             ))}
           </Disclosure.Panel>
         </>
