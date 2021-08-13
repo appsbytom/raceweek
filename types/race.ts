@@ -7,17 +7,20 @@ export type Race = {
 }
 
 export enum Series {
-  F1= 'f1',
-  F2= 'f2',
-  F3= 'f3',
-  FE= 'fe',
-  WSeries= 'wseries'
+  F1 = 'f1',
+  F2 = 'f2',
+  F3 = 'f3',
+  FE = 'fe',
+  WSeries = 'wseries'
 }
 
 export type Session = {
   id: number | string
   name: string
+  type: string
   unconfirmed: boolean
   startTime: string
   endTime: string
 }
+
+export type FollowedSessions = string[]

@@ -5,16 +5,19 @@ const series = Series.WSeries
 const practiceSession = {
   id: 'p',
   name: 'Practice',
+  type: 'p',
   unconfirmed: false
 };
 const qualifyingSession = {
   id: 'q',
   name: 'Qualifying',
+  type: 'q',
   unconfirmed: false
 };
 const raceSession = {
   id: 'r',
   name: 'Race',
+  type: 'r',
   unconfirmed: false
 };
 

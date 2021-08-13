@@ -22,10 +22,10 @@ const getSessions = async (id): Promise<Session[]> => {
   const { data } = await f1Client.get<SessionsResponse>('/fom-results/timetables', { params: { meeting: id }})
 
   return data.timetables
-    .filter(session => session.session === 'q' || session.session === 's' || session.session === 'r')
     .sort((a, b) => Number(new Date(a.startTime)) - Number(new Date(b.startTime)))
     .map(session => ({
       id: `${id}-${session.session}`,
+      type: session.session,
       name: session.description,
       startTime: `${session.startTime}${session.gmtOffset}`,
       endTime: `${session.endTime}${session.gmtOffset}`,

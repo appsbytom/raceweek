@@ -4,9 +4,10 @@ import { RacesResponse } from './types'
 export const mapResponseToData = (data: RacesResponse, series: Series): Race[] => data.Races.map(race => ({
   id: race.RaceId,
   name: race.CountryName,
-  sessions: race.Sessions.filter(session => session.SessionCode === 'RESULT').map(session => ({
+  sessions: race.Sessions.map(session => ({
     id: session.SessionId,
     name: session.SessionName,
+    type: session.SessionCode,
     unconfirmed: session.Unconfirmed,
     startTime: session.SessionStartTime,
     endTime: session.SessionEndTime

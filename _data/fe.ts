@@ -5,21 +5,25 @@ const series = Series.FE
 const practice1Session = {
   id: 'p-1',
   name: 'Practice 1',
+  type: 'p1',
   unconfirmed: false
 };
 const practice2Session = {
   id: 'p-2',
   name: 'Practice 2',
+  type: 'p2',
   unconfirmed: false
 };
 const qualifyingSession = {
   id: 'q',
   name: 'Qualifying & Super Pole',
+  type: 'q',
   unconfirmed: false
 };
 const raceSession = {
   id: 'r',
   name: 'Race',
+  type: 'r',
   unconfirmed: false
 };
 
