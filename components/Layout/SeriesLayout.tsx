@@ -1,16 +1,18 @@
-import { FollowedSessions, Race } from '@/types/race'
+import { Race, Series } from '@/types/race'
 import { getFutureRaces } from '@/utils/races'
+import { usePreferences } from '../PreferencesContext/PreferencesContext'
 import RaceCard from '../RaceCard'
 import Layout from './Layout'
 
 type Props = {
   disclaimer: string
   races: Race[]
-  followedSessions: FollowedSessions
+  series: Series
 }
 
-const SeriesLayout = ({ disclaimer, races, followedSessions }: Props) => {
-  const futureRaces = getFutureRaces(races, followedSessions)
+const SeriesLayout = ({ disclaimer, races, series }: Props) => {
+  const { followedSessions: { [series]: seriesFollowedSessions } } = usePreferences()
+  const futureRaces = getFutureRaces(races, seriesFollowedSessions)
 
   return (
     <Layout disclaimer={disclaimer}>

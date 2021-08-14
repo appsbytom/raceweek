@@ -1,6 +1,6 @@
 import Layout from '@/components/Layout/Layout'
 import Unconfirmed from '@/components/Unconfirmed'
-import { usePreferences } from '@/components/PreferencesContext'
+import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
 import { getRaces as getF1Races } from '@/lib/f1/f1'
 import { getRaces as getF2Races } from '@/lib/f2f3/f2'
 import { getRaces as getF3Races } from '@/lib/f2f3/f3'

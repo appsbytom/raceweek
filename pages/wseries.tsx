@@ -1,7 +1,6 @@
 import SeriesLayout from '@/components/Layout/SeriesLayout'
-import { usePreferences } from '@/components/PreferencesContext'
 import { getRaces } from '@/lib/wseries'
-import { Race } from '@/types/race'
+import { Race, Series } from '@/types/race'
 
 type Props = {
   races: Race[]
@@ -9,16 +8,12 @@ type Props = {
 
 export const getStaticProps = async () => ({ props: { races: getRaces() }})
 
-const WSeries = ({ races }: Props) => {
-  const { followedSessions: { wseries }} = usePreferences()
-
-  return (
-    <SeriesLayout
-      followedSessions={wseries}
-      disclaimer="Not affiliated with W Series"
-      races={races}
-    />
-  )
-}
+const WSeries = ({ races }: Props) => (
+  <SeriesLayout
+    series={Series.WSeries}
+    disclaimer="Not affiliated with W Series"
+    races={races}
+  />
+)
 
 export default WSeries

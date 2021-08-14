@@ -1,4 +1,4 @@
-import PreferencesProvider from '@/components/PreferencesContext'
+import PreferencesProvider from '@/components/PreferencesContext/PreferencesContext'
 import dayjs from 'dayjs'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
