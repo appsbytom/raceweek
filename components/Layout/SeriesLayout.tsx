@@ -16,9 +16,16 @@ const SeriesLayout = ({ disclaimer, races, series }: Props) => {
 
   return (
     <Layout disclaimer={disclaimer}>
-      <div className="space-y-4">
-        {futureRaces.map(race => <RaceCard key={race.id} race={race} isNextRace={race.id === futureRaces[0].id} />)}
-      </div>
+      {futureRaces.length > 0 ? (
+        <div className="space-y-4">
+          {futureRaces.map(race => <RaceCard key={race.id} race={race} isNextRace={race.id === futureRaces[0].id} />)}
+        </div>
+      ) : (
+        <div className="text-center">
+          <h1 className="font-semibold">Season finished</h1>
+          <h2 className="text-gray-700">Next seasons races will appear once available</h2>
+        </div>
+      )}
     </Layout>
   )
 }
