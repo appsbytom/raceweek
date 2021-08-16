@@ -1,6 +1,7 @@
 import Layout from '@/components/Layout/Layout'
-import Unconfirmed from '@/components/Unconfirmed'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
+import Unconfirmed from '@/components/Unconfirmed'
+import useMounted from '@/hooks/useMounted'
 import { getRaces as getF1Races } from '@/lib/f1/f1'
 import { getRaces as getF2Races } from '@/lib/f2f3/f2'
 import { getRaces as getF3Races } from '@/lib/f2f3/f3'
@@ -51,6 +52,7 @@ export const getStaticProps = async () => {
 }
 
 const Home = ({ f1Races, f2Races, f3Races, feRaces, wseriesRaces }: Props) => {
+  const isMounted = useMounted()
   const { followedSessions } = usePreferences()
 
   const grouped = [
@@ -72,6 +74,8 @@ const Home = ({ f1Races, f2Races, f3Races, feRaces, wseriesRaces }: Props) => {
       return acc;
     }, {})
   const groupedSessions = Object.entries<GroupedSession[]>(grouped).map(([date, sessions]) => ({ date, sessions }))
+
+  if (!isMounted) return null
 
   return (
     <Layout>
