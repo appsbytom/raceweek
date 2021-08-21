@@ -1,29 +1,29 @@
-import { Race, Series } from '@/types/race'
+import { Race, Series, Type } from '@/types/race'
 
 const series = Series.FE
 
 const practice1Session = {
   id: 'p-1',
   name: 'Practice 1',
-  type: 'p1',
+  type: Type.PRACTICE,
   unconfirmed: false
 };
 const practice2Session = {
   id: 'p-2',
   name: 'Practice 2',
-  type: 'p2',
+  type: Type.PRACTICE,
   unconfirmed: false
 };
 const qualifyingSession = {
   id: 'q',
   name: 'Qualifying & Super Pole',
-  type: 'q',
+  type: Type.QUALIFYING,
   unconfirmed: false
 };
 const raceSession = {
   id: 'r',
   name: 'Race',
-  type: 'r',
+  type: Type.RACE,
   unconfirmed: false
 };
 

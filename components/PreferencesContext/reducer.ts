@@ -3,11 +3,11 @@ import { Action, Preferences } from './types'
 
 export const initialState: Preferences = {
   followedSessions: {
-    f1: ['q', 's', 'r'],
-    f2: ['RESULT'],
-    f3: ['RESULT'],
-    fe: ['r'],
-    wseries: ['r']
+    f1: [],
+    f2: [],
+    f3: [],
+    fe: [],
+    wseries: []
   }
 }
 export const reducer: Reducer<Preferences, Action> = (state: Preferences, action: Action) => {

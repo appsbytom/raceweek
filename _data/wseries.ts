@@ -1,23 +1,23 @@
-import { Race, Series } from '@/types/race'
+import { Race, Series, Type } from '@/types/race'
 
 const series = Series.WSeries
 
 const practiceSession = {
   id: 'p',
   name: 'Practice',
-  type: 'p',
+  type: Type.PRACTICE,
   unconfirmed: false
 };
 const qualifyingSession = {
   id: 'q',
   name: 'Qualifying',
-  type: 'q',
+  type: Type.QUALIFYING,
   unconfirmed: false
 };
 const raceSession = {
   id: 'r',
   name: 'Race',
-  type: 'r',
+  type: Type.RACE,
   unconfirmed: false
 };
 

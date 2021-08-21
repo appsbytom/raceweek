@@ -17,10 +17,16 @@ export enum Series {
 export type Session = {
   id: number | string
   name: string
-  type: string
+  type: Type
   unconfirmed: boolean
   startTime: string
   endTime: string
+}
+
+export enum Type {
+  PRACTICE = 'p',
+  QUALIFYING = 'q',
+  RACE = 'r'
 }
 
 export type FollowedSessions = string[]

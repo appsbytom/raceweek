@@ -1,5 +1,11 @@
-import { Race, Series } from '@/types/race'
+import { Race, Series, Type } from '@/types/race'
 import { RacesResponse } from './types'
+
+const sessionMap = {
+  'PRACTICE': Type.PRACTICE,
+  'QUALIFYING': Type.QUALIFYING,
+  'RESULT': Type.RACE
+}
 
 export const mapResponseToData = (data: RacesResponse, series: Series): Race[] => data.Races.map(race => ({
   id: race.RaceId,
@@ -7,7 +13,7 @@ export const mapResponseToData = (data: RacesResponse, series: Series): Race[] =
   sessions: race.Sessions.map(session => ({
     id: session.SessionId,
     name: session.SessionName,
-    type: session.SessionCode,
+    type: sessionMap[session.SessionCode],
     unconfirmed: session.Unconfirmed,
     startTime: session.SessionStartTime,
     endTime: session.SessionEndTime
