@@ -70,9 +70,9 @@ const races: Race[] = [
     id: 'belgian',
     name: 'Belgian',
     sessions: [
-      { ...practiceSession, startTime: '2021-08-27T12:55:00+02:00', endTime: '2021-08-27T13:25:00+02:00', unconfirmed: true },
-      { ...qualifyingSession, startTime: '2021-08-27T16:30:00+02:00', endTime: '2021-08-27T17:00:00+02:00', unconfirmed: true },
-      { ...raceSession, startTime: '2021-08-28T16:30:00+02:00', endTime: '2021-08-28T17:05:00+02:00', unconfirmed: true }
+      { ...practiceSession, startTime: '2021-08-27T12:55:00+02:00', endTime: '2021-08-27T13:25:00+02:00' },
+      { ...qualifyingSession, startTime: '2021-08-27T16:30:00+02:00', endTime: '2021-08-27T17:00:00+02:00' },
+      { ...raceSession, startTime: '2021-08-28T16:30:00+02:00', endTime: '2021-08-28T17:05:00+02:00' }
     ],
     provisional: false,
     series
@@ -81,9 +81,9 @@ const races: Race[] = [
     id: 'dutch',
     name: 'Dutch',
     sessions: [
-      { ...practiceSession, startTime: '2021-09-03T12:55:00+02:00', endTime: '2021-09-03T13:25:00+02:00', unconfirmed: true },
-      { ...qualifyingSession, startTime: '2021-09-03T16:30:00+02:00', endTime: '2021-09-03T17:00:00+02:00', unconfirmed: true },
-      { ...raceSession, startTime: '2021-09-04T16:30:00+02:00', endTime: '2021-09-04T17:05:00+02:00', unconfirmed: true }
+      { ...practiceSession, startTime: '2021-09-03T12:55:00+02:00', endTime: '2021-09-03T13:25:00+02:00' },
+      { ...qualifyingSession, startTime: '2021-09-03T16:30:00+02:00', endTime: '2021-09-03T17:00:00+02:00' },
+      { ...raceSession, startTime: '2021-09-04T16:30:00+02:00', endTime: '2021-09-04T17:05:00+02:00' }
     ],
     provisional: false,
     series
@@ -92,9 +92,9 @@ const races: Race[] = [
     id: 'united-states',
     name: 'United States',
     sessions: [
-      { ...practiceSession, startTime: '2021-10-22T14:00:00-05:00', endTime: '2021-10-22T14:30:00-05:00', unconfirmed: true },
-      { ...qualifyingSession, startTime: '2021-10-22T17:00:00-05:00', endTime: '2021-10-22T17:30:00-05:00', unconfirmed: true },
-      { ...raceSession, startTime: '2021-10-23T17:45:00-05:00', endTime: '2021-10-23T18:20:00-05:00', unconfirmed: true }
+      { ...practiceSession, startTime: '2021-10-22T14:00:00-05:00', endTime: '2021-10-22T14:30:00-05:00' },
+      { ...qualifyingSession, startTime: '2021-10-22T17:00:00-05:00', endTime: '2021-10-22T17:30:00-05:00' },
+      { ...raceSession, startTime: '2021-10-23T17:45:00-05:00', endTime: '2021-10-23T18:20:00-05:00' }
     ],
     provisional: false,
     series
@@ -103,9 +103,9 @@ const races: Race[] = [
     id: 'mexican',
     name: 'Mexican',
     sessions: [
-      { ...practiceSession, startTime: '2021-10-29T12:00:00-05:00', endTime: '2021-10-29T12:30:00-05:00', unconfirmed: true },
-      { ...qualifyingSession, startTime: '2021-10-29T15:00:00-05:00', endTime: '2021-10-29T15:30:00-05:00', unconfirmed: true },
-      { ...raceSession, startTime: '2021-10-30T15:45:00-05:00', endTime: '2021-10-30T16:20:00-05:00', unconfirmed: true }
+      { ...practiceSession, startTime: '2021-10-29T12:00:00-05:00', endTime: '2021-10-29T12:30:00-05:00' },
+      { ...qualifyingSession, startTime: '2021-10-29T15:00:00-05:00', endTime: '2021-10-29T15:30:00-05:00' },
+      { ...raceSession, startTime: '2021-10-30T15:45:00-05:00', endTime: '2021-10-30T16:20:00-05:00' }
     ],
     provisional: false,
     series
