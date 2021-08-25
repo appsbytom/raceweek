@@ -8,7 +8,8 @@ export type Preferences = {
     f3: FollowedSessions
     fe: FollowedSessions
     wseries: FollowedSessions
-  }
+  },
+  timezone: string
 }
 
 export type Action =
@@ -16,6 +17,7 @@ export type Action =
   {
     type: 'SET_FOLLOWED_SESSIONS'
     payload: { series: Series, followedSessions: FollowedSessions }
-  }
+  } |
+  { type: 'SET_TIMEZONE', payload: string }
 
 export type ActionablePreferences = Preferences & { dispatch: Dispatch<Action> }

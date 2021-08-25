@@ -8,7 +8,8 @@ export const initialState: Preferences = {
     f3: [],
     fe: [],
     wseries: []
-  }
+  },
+  timezone: ''
 }
 export const reducer: Reducer<Preferences, Action> = (state: Preferences, action: Action) => {
   switch (action.type) {
@@ -16,6 +17,8 @@ export const reducer: Reducer<Preferences, Action> = (state: Preferences, action
       return { ...state, followedSessions: action.payload }
     case 'SET_FOLLOWED_SESSIONS':
       return { ...state, followedSessions: { ...state.followedSessions, [action.payload.series]: action.payload.followedSessions }}
+    case 'SET_TIMEZONE':
+      return { ...state, timezone: action.payload }
     default:
       return state
   }

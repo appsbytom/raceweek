@@ -8,7 +8,6 @@ import { getRaces as getF3Races } from '@/lib/f2f3/f3'
 import { getRaces as getFERaces } from '@/lib/fe'
 import { getRaces as getWSeriesRaces } from '@/lib/wseries'
 import { FollowedSessions, Race, Series, Session } from '@/types/race'
-import { toTimezone } from '@/utils/dateTimeFormatter'
 import { getFutureRaces } from '@/utils/races'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
@@ -53,7 +52,7 @@ export const getStaticProps = async () => {
 
 const Home = ({ f1Races, f2Races, f3Races, feRaces, wseriesRaces }: Props) => {
   const isMounted = useMounted()
-  const { followedSessions } = usePreferences()
+  const { followedSessions, timezone } = usePreferences()
 
   const grouped = [
     ...getFollowedSeriesRaces(f1Races, followedSessions.f1),
@@ -90,7 +89,7 @@ const Home = ({ f1Races, f2Races, f3Races, feRaces, wseriesRaces }: Props) => {
                     <div className={classNames('w-3', seriesColourMap[session.series])} />
                     <div className="py-2 px-4 flex items-center space-x-2">
                       <h2>{session.raceName}: {session.name}</h2>
-                      <small>{toTimezone(session.startTime).format('HH:mm')} <Unconfirmed unconfirmed={session.unconfirmed} /></small>
+                      <small>{dayjs(session.startTime).tz(timezone).format('HH:mm')} <Unconfirmed unconfirmed={session.unconfirmed} /></small>
                     </div>
                   </div>
                 ))}

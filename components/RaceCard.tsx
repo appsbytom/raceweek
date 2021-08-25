@@ -1,10 +1,12 @@
 import { Race } from '@/types/race'
-import { formatToDate, formatToDateTime } from '@/utils/dateTimeFormatter'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import { usePreferences } from './PreferencesContext/PreferencesContext'
 import Unconfirmed from './Unconfirmed'
+
+const formatToDate = date => dayjs(date).format('D MMM')
 
 type Props = {
   race: Race
@@ -12,6 +14,7 @@ type Props = {
 }
 
 const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) => {
+  const { timezone } = usePreferences()
   const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
   const firstSessionDate = formatToDate(firstSessionStartTime)
   const sessionDateRange = (sessions.length > 1 && !dayjs(firstSessionStartTime).isSame(lastSessionStartTime, 'day')) ? `${firstSessionDate} - ${formatToDate(lastSessionStartTime)}` : firstSessionDate;
@@ -37,7 +40,7 @@ const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) 
           <Disclosure.Panel className="pb-4 pr-4 pl-11 space-y-1">
             {sessions.map(session => (
               <h3 key={session.id} className={classNames('text-sm', { 'line-through': dayjs(session.endTime).isBefore(dayjs()) })}>
-                {session.name}: {formatToDateTime(session.startTime)} <Unconfirmed unconfirmed={session.unconfirmed} />
+                {session.name}: {dayjs(session.startTime).tz(timezone).format('ddd HH:mm')} <Unconfirmed unconfirmed={session.unconfirmed} />
               </h3>
             ))}
           </Disclosure.Panel>
