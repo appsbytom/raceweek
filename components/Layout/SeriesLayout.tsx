@@ -1,6 +1,6 @@
 import useMounted from '@/hooks/useMounted'
 import { Race, Series } from '@/types/race'
-import { getFutureRaces } from '@/utils/races'
+import { getFutureRacesWithFollowedSessions } from '@/utils/races'
 import FollowedSessions from '../FollowedSessions'
 import { usePreferences } from '../PreferencesContext/PreferencesContext'
 import RaceCard from '../RaceCard'
@@ -15,7 +15,7 @@ type Props = {
 const SeriesLayout = ({ disclaimer, races, series }: Props) => {
   const isMounted = useMounted()
   const { followedSessions: { [series]: seriesFollowedSessions } } = usePreferences()
-  const futureRaces = getFutureRaces(races, seriesFollowedSessions)
+  const futureRaces = getFutureRacesWithFollowedSessions(races, seriesFollowedSessions)
 
   if (!isMounted) return null
 

@@ -8,7 +8,7 @@ import { getRaces as getF3Races } from '@/lib/f2f3/f3'
 import { getRaces as getFERaces } from '@/lib/fe'
 import { getRaces as getWSeriesRaces } from '@/lib/wseries'
 import { FollowedSessions, Race, Series, Session } from '@/types/race'
-import { getFutureRaces } from '@/utils/races'
+import { getFutureRacesWithFollowedSessions } from '@/utils/races'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 
@@ -22,7 +22,7 @@ const seriesColourMap = {
   [Series.WSeries]: 'bg-wseries'
 }
 
-const getFollowedSeriesRaces = (races: Race[], followedSessions: FollowedSessions) => followedSessions.length > 0 ? getFutureRaces(races, followedSessions) : []
+const getFollowedSeriesRaces = (races: Race[], followedSessions: FollowedSessions) => followedSessions.length > 0 ? getFutureRacesWithFollowedSessions(races, followedSessions) : []
 
 type Props = {
   f1Races: Race[]

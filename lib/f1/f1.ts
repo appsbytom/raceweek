@@ -1,3 +1,4 @@
+import { getFutureRaces } from '@/utils/races'
 import axios from 'axios'
 import { Race, Series, Session, Type } from '@/types/race'
 import { EventsResponse, SessionsResponse } from './types'
@@ -7,7 +8,7 @@ const f1Client = axios.create({ baseURL: 'https://api.formula1.com/v1', headers:
 export const getRaces = async (): Promise<Race[]> => {
   const { data } = await f1Client.get<EventsResponse>('/editorial-eventlisting/events')
 
-  return Promise.all(data.events
+  const races = await Promise.all(data.events
     .filter(race => race.type === 'race')
     .map(async race => ({
       id: race.meetingKey,
@@ -16,6 +17,8 @@ export const getRaces = async (): Promise<Race[]> => {
       provisional: race.meetingName === 'TBC',
       series: Series.F1
     })))
+
+  return getFutureRaces(races)
 }
 
 const sessionMap = {
