@@ -1,4 +1,4 @@
-import { Series, Type } from '@/types/race'
+import { Series, Type } from '@/types/event'
 import { ChangeEvent, useState } from 'react'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
 
@@ -7,9 +7,9 @@ type Props = {
 }
 
 const sessionTypes = [
-  { name: 'Practice', value: Type.PRACTICE },
-  { name: 'Qualifying', value: Type.QUALIFYING },
-  { name: 'Race', value: Type.RACE }
+  { name: 'Practice', value: Type.Practice },
+  { name: 'Qualifying', value: Type.Qualifying },
+  { name: 'Race', value: Type.Race }
 ]
 
 const FollowedSessions = ({ series }: Props) => {

@@ -1,35 +1,35 @@
 import useMounted from '@/hooks/useMounted'
-import { Race, Series } from '@/types/race'
-import { getFutureRacesWithFollowedSessions } from '@/utils/races'
+import { Event, Series } from '@/types/event'
+import { getFutureEventsWithFollowedSessions } from '@/utils/events'
 import FollowedSessions from '../FollowedSessions'
 import { usePreferences } from '../PreferencesContext/PreferencesContext'
-import RaceCard from '../RaceCard'
+import EventCard from '../EventCard'
 import Layout from './Layout'
 
 type Props = {
   disclaimer: string
-  races: Race[]
+  events: Event[]
   series: Series
 }
 
-const SeriesLayout = ({ disclaimer, races, series }: Props) => {
+const SeriesLayout = ({ disclaimer, events, series }: Props) => {
   const isMounted = useMounted()
   const { followedSessions: { [series]: seriesFollowedSessions } } = usePreferences()
-  const futureRaces = getFutureRacesWithFollowedSessions(races, seriesFollowedSessions)
+  const futureEvents = getFutureEventsWithFollowedSessions(events, seriesFollowedSessions)
 
   if (!isMounted) return null
 
   return (
     <Layout disclaimer={disclaimer}>
       <FollowedSessions series={series} />
-      {futureRaces.length > 0 ? (
+      {futureEvents.length > 0 ? (
         <div className="space-y-4">
-          {futureRaces.map(race => <RaceCard key={race.id} race={race} isNextRace={race.id === futureRaces[0].id} />)}
+          {futureEvents.map(event => <EventCard key={event.id} event={event} isNextEvent={event.id === futureEvents[0].id} />)}
         </div>
       ) : (
         <div className="text-center">
           <h1 className="font-semibold">Season finished</h1>
-          <h2 className="text-gray-700">Next seasons races will appear once available</h2>
+          <h2 className="text-gray-700">Next seasons events will appear once available</h2>
         </div>
       )}
     </Layout>

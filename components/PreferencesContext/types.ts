@@ -1,4 +1,4 @@
-import { FollowedSessions, Series } from '@/types/race'
+import { FollowedSessions, Series } from '../../types/event'
 import { Dispatch } from 'react'
 
 export type Preferences = {

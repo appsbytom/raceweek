@@ -1,17 +1,17 @@
 import SeriesLayout from '@/components/Layout/SeriesLayout'
-import { getRaces } from '@/lib/f2f3/f2'
-import { Race, Series } from '@/types/race'
+import { getEvents } from '@/lib/f2f3/f2'
+import { Event, Series } from '@/types/event'
 
 type Props = {
-  races: Race[]
+  events: Event[]
 }
 
-export const getStaticProps = async () => ({ props: { races: await getRaces() }})
+export const getStaticProps = async () => ({ props: { events: await getEvents() }})
 
-const F2 = ({ races }: Props) => (
+const F2 = ({ events }: Props) => (
   <SeriesLayout
     series={Series.F2}
-    races={races}
+    events={events}
     disclaimer="FIA FORMULA 2 CHAMPIONSHIP, FIA FORMULA 2, FORMULA 2, F2 are trademarks of the FIA."
   />
 )

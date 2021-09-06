@@ -1,14 +1,14 @@
-import { getFutureRaces } from '@/utils/races'
+import { getFutureEvents } from '@/utils/events'
 import axios from 'axios'
-import { Race, Series, Session, Type } from '@/types/race'
+import { Event, Series, Session, Type } from '@/types/event'
 import { EventsResponse, SessionsResponse } from './types'
 
 const f1Client = axios.create({ baseURL: 'https://api.formula1.com/v1', headers: { apikey: process.env.F1_KEY }})
 
-export const getRaces = async (): Promise<Race[]> => {
+export const getEvents = async (): Promise<Event[]> => {
   const { data } = await f1Client.get<EventsResponse>('/editorial-eventlisting/events')
 
-  const races = await Promise.all(data.events
+  const events = await Promise.all(data.events
     .filter(race => race.type === 'race')
     .map(async race => ({
       id: race.meetingKey,
@@ -18,16 +18,16 @@ export const getRaces = async (): Promise<Race[]> => {
       series: Series.F1
     })))
 
-  return getFutureRaces(races)
+  return getFutureEvents(events)
 }
 
 const sessionMap = {
-  'p1': Type.PRACTICE,
-  'p2': Type.PRACTICE,
-  'p3': Type.PRACTICE,
-  'q': Type.QUALIFYING,
-  's': Type.QUALIFYING,
-  'r': Type.RACE
+  'p1': Type.Practice,
+  'p2': Type.Practice,
+  'p3': Type.Practice,
+  'q': Type.Qualifying,
+  's': Type.Qualifying,
+  'r': Type.Race
 }
 
 const getSessions = async (id): Promise<Session[]> => {

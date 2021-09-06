@@ -1,4 +1,4 @@
-export type Race = {
+export type Event = {
   id: number | string
   name: string
   sessions: Session[]
@@ -24,9 +24,9 @@ export type Session = {
 }
 
 export enum Type {
-  PRACTICE = 'p',
-  QUALIFYING = 'q',
-  RACE = 'r'
+  Practice = 'p',
+  Qualifying = 'q',
+  Race = 'r'
 }
 
 export type FollowedSessions = string[]

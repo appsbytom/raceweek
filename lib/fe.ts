@@ -1,5 +1,5 @@
-import { Race } from '@/types/race'
-import { getFutureRaces } from '@/utils/races'
+import { Event } from '@/types/event'
+import { getFutureEvents } from '@/utils/events'
 import data from '../_data/fe'
 
-export const getRaces = (): Race[] => getFutureRaces(data)
+export const getEvents = (): Event[] => getFutureEvents(data)

@@ -1,15 +1,15 @@
-import { Race, Series, Type } from '@/types/race'
-import { getFutureRaces } from '@/utils/races'
+import { Event, Series, Type } from '@/types/event'
+import { getFutureEvents } from '@/utils/events'
 import { RacesResponse } from './types'
 
 const sessionMap = {
-  'PRACTICE': Type.PRACTICE,
-  'QUALIFYING': Type.QUALIFYING,
-  'RESULT': Type.RACE
+  'PRACTICE': Type.Practice,
+  'QUALIFYING': Type.Qualifying,
+  'RESULT': Type.Race
 }
 
-export const mapResponseToData = (data: RacesResponse, series: Series): Race[] => {
-  const races = data.Races.map(race => ({
+export const mapResponseToData = (data: RacesResponse, series: Series): Event[] => {
+  const events = data.Races.map(race => ({
     id: race.RaceId,
     name: race.CountryName,
     sessions: race.Sessions.map(session => ({
@@ -24,5 +24,5 @@ export const mapResponseToData = (data: RacesResponse, series: Series): Race[] =
     series
   }))
 
-  return getFutureRaces(races)
+  return getFutureEvents(events)
 }

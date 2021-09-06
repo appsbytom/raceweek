@@ -2,17 +2,17 @@ import Layout from '@/components/Layout/Layout'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
 import Unconfirmed from '@/components/Unconfirmed'
 import useMounted from '@/hooks/useMounted'
-import { getRaces as getF1Races } from '@/lib/f1/f1'
-import { getRaces as getF2Races } from '@/lib/f2f3/f2'
-import { getRaces as getF3Races } from '@/lib/f2f3/f3'
-import { getRaces as getFERaces } from '@/lib/fe'
-import { getRaces as getWSeriesRaces } from '@/lib/wseries'
-import { FollowedSessions, Race, Series, Session } from '@/types/race'
-import { getFutureRacesWithFollowedSessions } from '@/utils/races'
+import { getEvents as getF1Events } from '@/lib/f1/f1'
+import { getEvents as getF2Events } from '@/lib/f2f3/f2'
+import { getEvents as getF3Events } from '@/lib/f2f3/f3'
+import { getEvents as getFEEvents } from '@/lib/fe'
+import { getEvents as getWSeriesEvents } from '@/lib/wseries'
+import { FollowedSessions, Event, Series, Session } from '@/types/event'
+import { getFutureEventsWithFollowedSessions } from '@/utils/events'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 
-type GroupedSession = Session & { series: string, raceName: string }
+type GroupedSession = Session & { series: string, eventName: string }
 
 const seriesColourMap = {
   [Series.F1]: 'bg-f1',
@@ -22,46 +22,46 @@ const seriesColourMap = {
   [Series.WSeries]: 'bg-wseries'
 }
 
-const getFollowedSeriesRaces = (races: Race[], followedSessions: FollowedSessions) => followedSessions.length > 0 ? getFutureRacesWithFollowedSessions(races, followedSessions) : []
+const getFollowedSeriesEvents = (events: Event[], followedSessions: FollowedSessions) => followedSessions.length > 0 ? getFutureEventsWithFollowedSessions(events, followedSessions) : []
 
 type Props = {
-  f1Races: Race[]
-  f2Races: Race[]
-  f3Races: Race[]
-  feRaces: Race[]
-  wseriesRaces: Race[]
+  f1Events: Event[]
+  f2Events: Event[]
+  f3Events: Event[]
+  feEvents: Event[]
+  wseriesEvents: Event[]
 }
 
 export const getStaticProps = async () => {
-  const f1Races = await getF1Races()
-  const f2Races = await getF2Races()
-  const f3Races = await getF3Races()
-  const feRaces = getFERaces()
-  const wseriesRaces = getWSeriesRaces()
+  const f1Events = await getF1Events()
+  const f2Events = await getF2Events()
+  const f3Events = await getF3Events()
+  const feEvents = getFEEvents()
+  const wseriesEvents = await getWSeriesEvents()
 
   return {
     props: {
-      f1Races,
-      f2Races,
-      f3Races,
-      feRaces,
-      wseriesRaces
+      f1Events,
+      f2Events,
+      f3Events,
+      feEvents,
+      wseriesEvents
     }
   }
 }
 
-const Home = ({ f1Races, f2Races, f3Races, feRaces, wseriesRaces }: Props) => {
+const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) => {
   const isMounted = useMounted()
   const { followedSessions, timezone } = usePreferences()
 
   const grouped = [
-    ...getFollowedSeriesRaces(f1Races, followedSessions.f1),
-    ...getFollowedSeriesRaces(f2Races, followedSessions.f2),
-    ...getFollowedSeriesRaces(f3Races, followedSessions.f3),
-    ...getFollowedSeriesRaces(feRaces, followedSessions.fe),
-    ...getFollowedSeriesRaces(wseriesRaces, followedSessions.wseries)
+    ...getFollowedSeriesEvents(f1Events, followedSessions.f1),
+    ...getFollowedSeriesEvents(f2Events, followedSessions.f2),
+    ...getFollowedSeriesEvents(f3Events, followedSessions.f3),
+    ...getFollowedSeriesEvents(feEvents, followedSessions.fe),
+    ...getFollowedSeriesEvents(wseriesEvents, followedSessions.wseries)
   ]
-    .flatMap(race => race.sessions.map(session => ({ ...session, series: race.series, raceName: race.name })))
+    .flatMap(event => event.sessions.map(session => ({ ...session, series: event.series, eventName: event.name })))
     .filter(session => dayjs(session.endTime).isSameOrAfter(dayjs()))
     .sort((a, b) => Number(new Date(a.startTime)) - Number(new Date(b.startTime)) )
     .reduce((acc, session) => {
@@ -88,7 +88,7 @@ const Home = ({ f1Races, f2Races, f3Races, feRaces, wseriesRaces }: Props) => {
                   <div key={session.id} className="border-b last:border-b-0 flex">
                     <div className={classNames('w-3', seriesColourMap[session.series])} />
                     <div className="py-2 px-4 flex items-center space-x-2">
-                      <h2>{session.raceName}: {session.name}</h2>
+                      <h2>{session.eventName}: {session.name}</h2>
                       <small>{dayjs(session.startTime).tz(timezone).format('HH:mm')} <Unconfirmed unconfirmed={session.unconfirmed} /></small>
                     </div>
                   </div>

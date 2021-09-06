@@ -1,18 +1,18 @@
 import SeriesLayout from '@/components/Layout/SeriesLayout'
-import { getRaces } from '@/lib/wseries'
-import { Race, Series } from '@/types/race'
+import { getEvents } from '@/lib/wseries'
+import { Event, Series } from '@/types/event'
 
 type Props = {
-  races: Race[]
+  events: Event[]
 }
 
-export const getStaticProps = async () => ({ props: { races: getRaces() }})
+export const getStaticProps = async () => ({ props: { events: await getEvents() }})
 
-const WSeries = ({ races }: Props) => (
+const WSeries = ({ events }: Props) => (
   <SeriesLayout
     series={Series.WSeries}
     disclaimer="Not affiliated with W Series"
-    races={races}
+    events={events}
   />
 )
 

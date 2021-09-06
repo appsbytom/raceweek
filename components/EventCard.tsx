@@ -1,4 +1,4 @@
-import { Race } from '@/types/race'
+import { Event } from '@/types/event'
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
@@ -9,11 +9,11 @@ import Unconfirmed from './Unconfirmed'
 const formatToDate = date => dayjs(date).format('D MMM')
 
 type Props = {
-  race: Race
-  isNextRace: boolean
+  event: Event
+  isNextEvent: boolean
 }
 
-const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) => {
+const EventCard = ({ event: { name, sessions, provisional }, isNextEvent }: Props) => {
   const { timezone } = usePreferences()
   const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
   const firstSessionDate = formatToDate(firstSessionStartTime)
@@ -29,7 +29,7 @@ const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) 
   }
 
   return (
-    <Disclosure as="div" className="border border-gray-200 rounded hover:shadow" defaultOpen={isNextRace}>
+    <Disclosure as="div" className="border border-gray-200 rounded hover:shadow" defaultOpen={isNextEvent}>
       {({ open }) => (
         <>
           <Disclosure.Button className="flex items-center p-4 space-x-2 w-full">
@@ -50,4 +50,4 @@ const RaceCard = ({ race: { name, sessions, provisional }, isNextRace }: Props) 
   )
 }
 
-export default RaceCard
+export default EventCard

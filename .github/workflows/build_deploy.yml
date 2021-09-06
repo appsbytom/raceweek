@@ -23,6 +23,7 @@ jobs:
           F1_KEY: ${{ secrets.F1_KEY }}
           F2_KEY: ${{ secrets.F2_KEY }}
           F3_KEY: ${{ secrets.F3_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           npm run build
           npm run export
