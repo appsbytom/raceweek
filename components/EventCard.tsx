@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
 import Unconfirmed from './Unconfirmed'
 
-const formatToDate = date => dayjs(date).format('D MMM')
+const formatToDate = date => date.format('D MMM')
 
 type Props = {
   event: Event
@@ -16,8 +16,10 @@ type Props = {
 const EventCard = ({ event: { name, sessions, provisional }, isNextEvent }: Props) => {
   const { timezone } = usePreferences()
   const { 0: { startTime: firstSessionStartTime }, [sessions.length - 1]: { startTime: lastSessionStartTime }} = sessions
-  const firstSessionDate = formatToDate(firstSessionStartTime)
-  const sessionDateRange = (sessions.length > 1 && !dayjs(firstSessionStartTime).isSame(lastSessionStartTime, 'day')) ? `${firstSessionDate} - ${formatToDate(lastSessionStartTime)}` : firstSessionDate;
+  const firstSessionDate = dayjs(firstSessionStartTime).tz(timezone)
+  const firstSessionFormatted = formatToDate(firstSessionDate)
+  const lastSessionDate = dayjs(lastSessionStartTime).tz(timezone)
+  const sessionDateRange = (sessions.length > 1 && !firstSessionDate.isSame(lastSessionDate, 'day')) ? `${firstSessionFormatted} - ${formatToDate(lastSessionDate)}` : firstSessionFormatted;
 
   if (provisional) {
     return (

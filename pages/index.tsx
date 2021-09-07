@@ -65,7 +65,7 @@ const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) 
     .filter(session => dayjs(session.endTime).isSameOrAfter(dayjs()))
     .sort((a, b) => Number(new Date(a.startTime)) - Number(new Date(b.startTime)) )
     .reduce((acc, session) => {
-      const dateKey = dayjs(session.startTime).format('YYYY/MM/DD')
+      const dateKey = dayjs(session.startTime).tz(timezone).format('YYYY/MM/DD')
       if (!acc[dateKey]) {
         acc[dateKey] = []
       }
