@@ -28,5 +28,8 @@
     }
   },
   "exclude": ["node_modules", ".next"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "ts-node": {
+    "require": ["dotenv/config","tsconfig-paths/register"]
+  }
 }

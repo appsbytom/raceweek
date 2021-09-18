@@ -4,6 +4,7 @@
 datasource db {
   provider        = "mysql"
   url             = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
   planetScaleMode = true
 }
 
@@ -23,7 +24,7 @@ model Event {
 }
 
 model Session {
-  id          Int      @id @default(autoincrement())
+  id          String
   name        String
   type        String
   unconfirmed Boolean  @default(false)
@@ -32,5 +33,6 @@ model Session {
   event       Event    @relation(fields: [eventId], references: [id])
   eventId     String   @map("event_id")
 
+  @@id([id, eventId])
   @@map("sessions")
 }

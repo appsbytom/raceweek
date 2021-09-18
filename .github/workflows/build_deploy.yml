@@ -25,6 +25,7 @@ jobs:
           F3_KEY: ${{ secrets.F3_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
+          npm run scrape-events
           npm run build
           npm run export
 
