@@ -1,12 +1,17 @@
-name: Build
+name: CI
 on:
-  push:
-    branches-ignore: [main]
+  - pull_request
+  - pull_request_target
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]') ||
+      (github.event_name != 'pull_request_target' && github.actor != 'dependabot[bot]')
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || '' }}
 
       - uses: actions/cache@v2
         with:
