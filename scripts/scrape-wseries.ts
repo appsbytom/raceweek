@@ -13,20 +13,43 @@ const CONSOLE_WRAPPER = '---------- WSERIES SCRAPER ----------'
 
 const main = async () => {
   console.log(CONSOLE_WRAPPER)
-  console.log('Started scraping events')
 
   const { data } = await axios.get('https://wseries.com')
   const $ = cheerio.load(data)
-
-  const events = await Promise.all($('a.race').map((i, el) => {
+  const events = $('a.race').map((i, el) => {
     const element = $(el)
     const link = element.attr('href')
     const status = element.find('span.race__status').text().trim()
     const name = element.find('h3.race__name').text().trim()
 
     return { link, status, name, id: new URL(link).pathname.split('/')[2] }
-  })
-    .get()
+  }).get().filter(event => event.id);
+  console.log('Scraped events, found: %s', events.map(event => event.id).join(', '))
+
+  const [{ count: deletedSessionsCount }, { count: deletedEventsCount }] = await prisma.$transaction([
+    prisma.session.deleteMany({
+      where: {
+        NOT: events.map(event => ({
+          eventId: event.id
+        }))
+      }
+    }),
+    prisma.event.deleteMany({
+      where: {
+        NOT: events.map(event => ({
+          id: event.id
+        })),
+        series: Series.WSeries
+      }
+    })
+  ])
+  if (!deletedEventsCount && !deletedSessionsCount) {
+    console.log('No events cancelled, nothing deleted')
+  } else {
+    console.log('Deleted %i cancelled events with %i associated sessions', deletedEventsCount, deletedSessionsCount)
+  }
+
+  const eventsWithSessions = await Promise.all(events
     .filter(event => !event.status)
     .map(async event => {
       const { data } = await axios.get(event.link)
@@ -60,11 +83,12 @@ const main = async () => {
         ],
         series: Series.WSeries
       }
-  }));
+    }))
+  const joinedEventIds = eventsWithSessions.map(event => event.id).join(', ')
+  console.log('Scraped sessions data for: %s', joinedEventIds)
 
-  console.log('Finished scraping events, starting upserts on %s', events.map(event => event.id).join(', '))
   await prisma.$transaction(
-    events.map(event => prisma.event.upsert({
+    eventsWithSessions.map(event => prisma.event.upsert({
       where: { id: event.id },
       update: {
         name: event.name,
@@ -82,8 +106,8 @@ const main = async () => {
       }
     }))
   )
+  console.log('Upserted %s with scraped event and sessions data', joinedEventIds)
 
-  console.log('Finished upserting events')
   console.log(CONSOLE_WRAPPER)
 }
 
