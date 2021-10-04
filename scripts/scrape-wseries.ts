@@ -59,7 +59,7 @@ const main = async () => {
         id: event.id,
         name: event.name,
         sessions: [
-          {
+          (practiceStart && practiceEnd) && {
             id: Type.Practice,
             name: 'Practice',
             type: Type.Practice,
@@ -80,7 +80,7 @@ const main = async () => {
             startTime: utcFormat(raceStart),
             endTime: utcFormat(raceEnd)
           }
-        ],
+        ].filter(Boolean),
         series: Series.WSeries
       }
     }))
