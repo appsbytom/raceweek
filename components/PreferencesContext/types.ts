@@ -1,23 +1,16 @@
-import { FollowedSessions, Series } from '../../types/event'
-import { Dispatch } from 'react'
+import { FollowedSessions } from '@/types/session'
+
+export type FollowedSessionsPreferences = {
+  f1: FollowedSessions
+  f2: FollowedSessions
+  f3: FollowedSessions
+  fe: FollowedSessions
+  wseries: FollowedSessions
+}
 
 export type Preferences = {
-  followedSessions: {
-    f1: FollowedSessions
-    f2: FollowedSessions
-    f3: FollowedSessions
-    fe: FollowedSessions
-    wseries: FollowedSessions
-  },
+  followedSessions: FollowedSessionsPreferences,
   timezone: string
 }
 
-export type Action =
-  { type: 'LOAD_FOLLOWED_SESSIONS', payload } |
-  {
-    type: 'SET_FOLLOWED_SESSIONS'
-    payload: { series: Series, followedSessions: FollowedSessions }
-  } |
-  { type: 'SET_TIMEZONE', payload: string }
-
-export type ActionablePreferences = Preferences & { dispatch: Dispatch<Action> }
+export type ActionablePreferences = Preferences & { save: (followedSessions: FollowedSessionsPreferences, timezone: string) => void }

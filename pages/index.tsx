@@ -1,18 +1,19 @@
-import Layout from '@/components/Layout/Layout'
+import Preferences from '@/components/Preferences'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
-import Unconfirmed from '@/components/Unconfirmed'
 import useMounted from '@/hooks/useMounted'
 import { getEvents as getF1Events } from '@/lib/f1/f1'
 import { getEvents as getF2Events } from '@/lib/f2f3/f2'
 import { getEvents as getF3Events } from '@/lib/f2f3/f3'
 import { getEvents as getFEEvents } from '@/lib/fe'
 import { getEvents as getWSeriesEvents } from '@/lib/wseries'
-import { FollowedSessions, Event, Series, Session } from '@/types/event'
-import { getFutureEventsWithFollowedSessions } from '@/utils/events'
+import Event, { Series } from '@/types/event'
+import Session, { FollowedSessions } from '@/types/session'
+import { getFutureEvents } from '@/utils/events'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import { GetStaticProps } from 'next'
 
-type GroupedSession = Session & { series: string, eventName: string }
+type GroupedSession = Session & { series: Series, eventName: string }
 
 const seriesColourMap = {
   [Series.F1]: 'bg-f1',
@@ -22,7 +23,9 @@ const seriesColourMap = {
   [Series.WSeries]: 'bg-wseries'
 }
 
-const getFollowedSeriesEvents = (events: Event[], followedSessions: FollowedSessions) => followedSessions.length > 0 ? getFutureEventsWithFollowedSessions(events, followedSessions) : []
+const getFollowedSeriesEvents = (events: Event[], followedSessions: FollowedSessions) => followedSessions.length > 0
+  ? getFutureEvents(events).map(event => ({ ...event, sessions: event.sessions.filter(session => followedSessions.includes(session.type)) }))
+  : []
 
 type Props = {
   f1Events: Event[]
@@ -32,12 +35,9 @@ type Props = {
   wseriesEvents: Event[]
 }
 
-export const getStaticProps = async () => {
-  const f1Events = await getF1Events()
-  const f2Events = await getF2Events()
-  const f3Events = await getF3Events()
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const [f1Events, f2Events, f3Events, wseriesEvents] = await Promise.all([getF1Events(), getF2Events(), getF3Events(), getWSeriesEvents()])
   const feEvents = getFEEvents()
-  const wseriesEvents = await getWSeriesEvents()
 
   return {
     props: {
@@ -77,8 +77,9 @@ const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) 
   if (!isMounted) return null
 
   return (
-    <Layout>
-      {groupedSessions.length > 0 ? (
+    <div className="max-w-2xl w-full mx-auto px-4 py-6">
+      <Preferences />
+      {groupedSessions.length > 0 && (
         <div className="space-y-4">
           {groupedSessions.map(group => (
             <div key={group.date}>
@@ -89,7 +90,7 @@ const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) 
                     <div className={classNames('w-3', seriesColourMap[session.series])} />
                     <div className="py-2 px-4 flex items-center space-x-2">
                       <h2>{session.eventName}: {session.name}</h2>
-                      <small>{dayjs(session.startTime).tz(timezone).format('HH:mm')} <Unconfirmed unconfirmed={session.unconfirmed} /></small>
+                      <small>{dayjs(session.startTime).tz(timezone).format('HH:mm')} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}</small>
                     </div>
                   </div>
                 ))}
@@ -97,13 +98,8 @@ const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) 
             </div>
           ))}
         </div>
-      ) : (
-        <div className="text-center">
-          <h1 className="font-semibold">You are not following any series</h1>
-          <h2 className="text-gray-700">Visit the series' page you are interested in and select the sessions you wish to follow</h2>
-        </div>
       )}
-    </Layout>
+    </div>
   )
 }
 

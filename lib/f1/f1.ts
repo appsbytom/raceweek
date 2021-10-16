@@ -1,6 +1,7 @@
+import Event, { Series } from '@/types/event'
+import Session, { Type } from '@/types/session'
 import { getFutureEvents } from '@/utils/events'
 import axios from 'axios'
-import { Event, Series, Session, Type } from '@/types/event'
 import { EventsResponse, SessionsResponse } from './types'
 
 const f1Client = axios.create({ baseURL: 'https://api.formula1.com/v1', headers: { apikey: process.env.F1_KEY }})

@@ -1,6 +1,6 @@
-import { Event, Series, Type } from '@/types/event'
+import Event, { Series } from '@/types/event'
+import { Type } from '@/types/session'
 import { getFutureEvents } from '@/utils/events'
-import dayjs from 'dayjs'
 import prisma from './prisma'
 
 const sessionMap = {

@@ -1,4 +1,5 @@
-import { Event, Series, Type } from '@/types/event'
+import Event, { Series } from '@/types/event'
+import { Type } from '@/types/session'
 
 const series = Series.FE
 

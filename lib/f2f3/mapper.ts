@@ -1,4 +1,5 @@
-import { Event, Series, Type } from '@/types/event'
+import Event, { Series } from '@/types/event'
+import { Type } from '@/types/session'
 import { getFutureEvents } from '@/utils/events'
 import { RacesResponse } from './types'
 

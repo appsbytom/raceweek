@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
-import { Series, Type } from '@/types/event'
+import { Series } from '@/types/event'
+import { Type } from '@/types/session'
 import axios from 'axios'
 import cheerio from 'cheerio'
 import dayjs from 'dayjs'

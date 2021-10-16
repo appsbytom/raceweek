@@ -1,4 +1,4 @@
-import { Event } from '@/types/event'
+import Event from '@/types/event'
 import { getFutureEvents } from '@/utils/events'
 import data from '../_data/fe'
 
