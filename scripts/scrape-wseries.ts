@@ -15,7 +15,7 @@ const CONSOLE_WRAPPER = '---------- WSERIES SCRAPER ----------'
 const main = async () => {
   console.log(CONSOLE_WRAPPER)
 
-  const { data } = await axios.get('https://wseries.com')
+  const { data } = await axios.get<string>('https://wseries.com')
   const $ = cheerio.load(data)
   const events = $('a.race').map((i, el) => {
     const element = $(el)
@@ -53,7 +53,7 @@ const main = async () => {
   const eventsWithSessions = await Promise.all(events
     .filter(event => !event.status)
     .map(async event => {
-      const { data } = await axios.get(event.link)
+      const { data } = await axios.get<string>(event.link)
       const $ = cheerio.load(data)
       const { practiceStart, practiceEnd, qualifyingStart, qualifyingEnd, raceStart, raceEnd } = $('div.countdown').data() as Record<string, string>
       return {
