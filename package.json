@@ -29,7 +29,7 @@
     "@types/react": "^17.0.30",
     "autoprefixer": "^10.3.6",
     "postcss": "^8.3.9",
-    "prisma": "^3.1.1",
+    "prisma": "^3.2.1",
     "tailwindcss": "^2.2.16",
     "ts-node": "^10.2.1",
     "tsconfig-paths": "^3.11.0",
