@@ -88,7 +88,7 @@ const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) 
                 {group.sessions.map(session => (
                   <div key={session.id} className="border-b last:border-b-0 flex">
                     <div className={classNames('w-3', seriesColourMap[session.series])} />
-                    <div className="py-2 px-4 flex items-center space-x-2">
+                    <div className="py-2 px-4 flex flex-1 items-center space-x-2">
                       <h2>{session.eventName}: {session.name}</h2>
                       <small>{dayjs(session.startTime).tz(timezone).format('HH:mm')} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}</small>
                     </div>
