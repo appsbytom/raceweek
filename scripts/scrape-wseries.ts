@@ -71,7 +71,7 @@ const main = async () => {
               startTime: utcFormat(practiceStart),
               endTime: utcFormat(practiceEnd)
             },
-            {
+            (qualifyingStart && qualifyingEnd) && {
               id: Type.Qualifying,
               name: 'Qualifying',
               type: Type.Qualifying,
