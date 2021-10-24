@@ -1,6 +1,6 @@
 import { Series } from '@/types/event'
 import { Type } from '@/types/session'
-import { Disclosure } from '@headlessui/react'
+import { Disclosure, Switch } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import { ChangeEvent, useState } from 'react'
@@ -22,27 +22,30 @@ const sessions = [
 ]
 
 const Preferences = () => {
-  const { followedSessions: savedFollowedSessions, timezone: savedTimezone, save: savePref } = usePreferences()
+  const { followedSessions: savedFollowedSessions, timezone: savedTimezone, use24HourFormat: savedUse24HourFormat, save: savePref } = usePreferences()
   const [followedSessions, setFollowedSessions] = useState(savedFollowedSessions)
   const [timezone, setTimezone] = useState(savedTimezone)
+  const [use24HourFormat, setUse24HourFormat] = useState(savedUse24HourFormat)
   const [isOpen, setIsOpen] = useState(false)
 
   const save = () => {
-    savePref(followedSessions, timezone)
+    savePref(followedSessions, timezone, use24HourFormat)
     setIsOpen(false)
   }
 
   const cancel = () => {
-    setTimezone(savedTimezone)
     setFollowedSessions(savedFollowedSessions)
+    setTimezone(savedTimezone)
+    setUse24HourFormat(savedUse24HourFormat)
     setIsOpen(false)
   }
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>, series: Series, session: string) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>, series: Series) => {
+    const value = event.target.value
     if (event.target.checked) {
-      setFollowedSessions(prevState => ({ ...prevState, [series]: [...prevState[series], session] }))
+      setFollowedSessions(prevState => ({ ...prevState, [series]: [...prevState[series], value] }))
     } else {
-      setFollowedSessions(prevState => ({ ...prevState, [series]: prevState[series].filter(prevSession => prevSession !== session) }))
+      setFollowedSessions(prevState => ({ ...prevState, [series]: prevState[series].filter(prevSession => prevSession !== value) }))
     }
   }
 
@@ -50,8 +53,8 @@ const Preferences = () => {
     <div className="rounded-lg shadow px-3 py-4 mb-6 text-gray-700">
       {isOpen ? (
         <>
-          <div className="mb-3">
-            <div className="grid sm:grid-cols-2 gap-2">
+          <div className="mb-4">
+            <div className="grid gap-2 mb-3 sm:grid-cols-2">
               {seriesList.map(({ value: seriesValue, name: seriesName }) => {
                 const seriesFollowedSessions = followedSessions[seriesValue]
                 return (
@@ -70,8 +73,9 @@ const Preferences = () => {
                                 <input
                                   id={id}
                                   type="checkbox"
+                                  value={sessionValue}
                                   checked={seriesFollowedSessions.includes(sessionValue)}
-                                  onChange={event => onChange(event, seriesValue, sessionValue)}
+                                  onChange={event => onChange(event, seriesValue)}
                                 />
                                 <label htmlFor={id}>{sessionName}</label>
                               </div>
@@ -84,16 +88,33 @@ const Preferences = () => {
                 )
               })}
             </div>
-            <div className="mt-3 sm:w-1/2">
-              <label htmlFor="timezoneSelect" className="block mb-2">Timezone</label>
-              <TimezoneSelect
-                inputId="timezoneSelect"
-                value={timezone}
-                onChange={selectedTimezone => setTimezone(selectedTimezone.value)}
-                styles={{
-                  menuList: (provided) => ({ ...provided, paddingTop: 0, paddingBottom: 0 })
-                }}
-              />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label htmlFor="timezoneSelect" className="block mb-2">Timezone</label>
+                <TimezoneSelect
+                  inputId="timezoneSelect"
+                  value={timezone}
+                  onChange={selectedTimezone => setTimezone(selectedTimezone.value)}
+                  styles={{
+                    menuList: (provided) => ({ ...provided, paddingTop: 0, paddingBottom: 0 })
+                  }}
+                />
+              </div>
+              <div>
+                <Switch.Group as="div" className="flex justify-between">
+                  <Switch.Label>Use 24-hour format</Switch.Label>
+                  <Switch
+                    className={classNames(`${use24HourFormat ? 'bg-blue-600' : 'bg-gray-200'} inline-flex w-11 p-0.5 rounded-full transition-colors ease-in-out duration-200`)}
+                    checked={use24HourFormat}
+                    onChange={setUse24HourFormat}
+                  >
+                      <span
+                        className={`${use24HourFormat ? 'translate-x-5' : 'translate-x-0'} h-5 w-5 bg-white rounded-full transform transition ease-in-out duration-200 pointer-events-none`}
+                        aria-hidden="true"
+                      />
+                  </Switch>
+                </Switch.Group>
+              </div>
             </div>
           </div>
           <div className="flex sm:justify-end space-x-3">

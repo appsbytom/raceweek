@@ -52,7 +52,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) => {
   const isMounted = useMounted()
-  const { followedSessions, timezone } = usePreferences()
+  const { followedSessions, timezone, use24HourFormat } = usePreferences()
 
   const grouped = [
     ...getFollowedSeriesEvents(f1Events, followedSessions.f1),
@@ -90,7 +90,7 @@ const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) 
                     <div className={classNames('w-3', seriesColourMap[session.series])} />
                     <div className="py-2 px-4 flex flex-1 items-center space-x-2">
                       <h2>{session.eventName}: {session.name}</h2>
-                      <small>{dayjs(session.startTime).tz(timezone).format('HH:mm')} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}</small>
+                      <small>{dayjs(session.startTime).tz(timezone).format(use24HourFormat ? 'HH:mm' : 'h:mm A')} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}</small>
                     </div>
                   </div>
                 ))}

@@ -9,8 +9,9 @@ export type FollowedSessionsPreferences = {
 }
 
 export type Preferences = {
-  followedSessions: FollowedSessionsPreferences,
+  followedSessions: FollowedSessionsPreferences
   timezone: string
+  use24HourFormat: boolean
 }
 
-export type ActionablePreferences = Preferences & { save: (followedSessions: FollowedSessionsPreferences, timezone: string) => void }
+export type ActionablePreferences = Preferences & { save: (followedSessions: FollowedSessionsPreferences, timezone: string, use24HourFormat: boolean) => void }
