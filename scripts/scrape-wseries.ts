@@ -26,28 +26,26 @@ const main = async () => {
     return { link, status, name, id: new URL(link).pathname.split('/')[2] }
   }).get().filter(event => event.id);
 
+  const sessionIds = events.map(event => ({ eventId: event.id }))
+  const eventIds = events.map(event => ({ id: event.id }))
   const uncompletedEvents = events.filter(event => !event.status)
   if (uncompletedEvents.length === 0) {
-    console.log('Season complete!')
+    const [{ count: deletedSessionsCount }, { count: deletedEventsCount }] = await prisma.$transaction([
+      prisma.session.deleteMany({ where: { OR: sessionIds }}),
+      prisma.event.deleteMany({ where: { OR: eventIds, series: Series.WSeries }})
+    ])
+    const message = 'Season complete!'
+    if (!deletedEventsCount && !deletedSessionsCount) {
+      console.log(message)
+    } else {
+      console.log('%s Deleted all data (%i events and %i sessions)', message, deletedEventsCount, deletedSessionsCount)
+    }
   } else {
     console.log('Scraped events, found: %s', events.map(event => event.id).join(', '))
 
     const [{ count: deletedSessionsCount }, { count: deletedEventsCount }] = await prisma.$transaction([
-      prisma.session.deleteMany({
-        where: {
-          NOT: events.map(event => ({
-            eventId: event.id
-          }))
-        }
-      }),
-      prisma.event.deleteMany({
-        where: {
-          NOT: events.map(event => ({
-            id: event.id
-          })),
-          series: Series.WSeries
-        }
-      })
+      prisma.session.deleteMany({ where: { NOT: sessionIds }}),
+      prisma.event.deleteMany({ where: { NOT: eventIds, series: Series.WSeries } })
     ])
     if (!deletedEventsCount && !deletedSessionsCount) {
       console.log('No events cancelled, nothing deleted')
