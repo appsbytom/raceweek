@@ -1,19 +1,12 @@
 import { Series } from '@/types/event'
 import { Type } from '@/types/session'
+import { ALL_SERIES, getSeriesNames } from '@/utils/series'
 import { Disclosure, Switch } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import { ChangeEvent, useState } from 'react'
 import TimezoneSelect from 'react-timezone-select'
+import DisclosureChevronButton from './DisclosureChevronButton'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
-
-const seriesList = [
-  { value: Series.F1, name: 'F1' },
-  { value: Series.F2, name: 'F2' },
-  { value: Series.F3, name: 'F3' },
-  { value: Series.FE, name: 'FE' },
-  { value: Series.WSeries, name: 'W Series' }
-]
 
 const sessions = [
   { value: Type.Practice, name: 'Practice' },
@@ -55,16 +48,15 @@ const Preferences = () => {
         <>
           <div className="mb-4">
             <div className="grid gap-2 mb-3 sm:grid-cols-2">
-              {seriesList.map(({ value: seriesValue, name: seriesName }) => {
+              {ALL_SERIES.map(({ value: seriesValue, name: seriesName }) => {
                 const seriesFollowedSessions = followedSessions[seriesValue]
                 return (
-                  <Disclosure key={seriesValue} as="div" defaultOpen={seriesFollowedSessions.length > 0}>
+                  <Disclosure key={seriesValue} defaultOpen={seriesFollowedSessions.length > 0}>
                     {({ open }) => (
-                      <>
-                        <Disclosure.Button className="flex items-center space-x-2 w-full text-gray-400 hover:text-gray-500">
-                          <ChevronDownIcon className={classNames('w-4 h-4', { 'transform rotate-180': open })}/>
-                          <h2 className="text-gray-700">{seriesName}</h2>
-                        </Disclosure.Button>
+                      <div>
+                        <DisclosureChevronButton className="w-full" open={open}>
+                          <h2 className="text-black">{seriesName}</h2>
+                        </DisclosureChevronButton>
                         <Disclosure.Panel className="flex items-center space-x-4 mt-1">
                           {sessions.map(({ value: sessionValue, name: sessionName }) => {
                             const id = `${seriesValue}-${sessionValue}`
@@ -82,7 +74,7 @@ const Preferences = () => {
                             )
                           })}
                         </Disclosure.Panel>
-                      </>
+                      </div>
                     )}
                   </Disclosure>
                 )
@@ -108,10 +100,10 @@ const Preferences = () => {
                     checked={use24HourFormat}
                     onChange={setUse24HourFormat}
                   >
-                      <span
-                        className={`${use24HourFormat ? 'translate-x-5' : 'translate-x-0'} h-5 w-5 bg-white rounded-full transform transition ease-in-out duration-200 pointer-events-none`}
-                        aria-hidden="true"
-                      />
+                    <span
+                      className={`${use24HourFormat ? 'translate-x-5' : 'translate-x-0'} h-5 w-5 bg-white rounded-full transform transition ease-in-out duration-200 pointer-events-none`}
+                      aria-hidden="true"
+                    />
                   </Switch>
                 </Switch.Group>
               </div>
@@ -137,7 +129,7 @@ const Preferences = () => {
           <div className="mb-3 text-center sm:text-left sm:mb-0 sm:w-2/3">
             {Object.values(savedFollowedSessions).flat().length > 0 ? (
               <>
-                <h1>You are following <strong>{seriesList.filter(series => savedFollowedSessions[series.value].length > 0).map(series => series.name).join(', ')}</strong></h1>
+                <h1>You are following <strong>{getSeriesNames(series => savedFollowedSessions[series.value].length > 0)}</strong></h1>
                 <h2>Your timezone is {savedTimezone}</h2>
               </>
             ) : (
