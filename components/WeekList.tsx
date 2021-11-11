@@ -24,7 +24,7 @@ const WeekList = ({ weeks }: Props) => {
         const includedSeries = days.flatMap(day => day.sessions.map(session => session.series))
 
         return (
-          <Disclosure defaultOpen={number === weeks[0].number}>
+          <Disclosure key={number} defaultOpen={number === weeks[0].number}>
             {({ open }) => (
               <div>
                 <DisclosureChevronButton open={open}>
