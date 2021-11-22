@@ -10,4 +10,6 @@ out
 # webstorm
 .idea
 
+tsconfig.tsbuildinfo
+
 .env

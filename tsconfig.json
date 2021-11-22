@@ -25,11 +25,12 @@
       "@/hooks/*": ["hooks/*"],
       "@/types/*": ["types/*"],
       "@/utils/*": ["utils/*"]
-    }
+    },
+    "incremental": true
   },
   "exclude": ["node_modules", ".next"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "ts-node": {
-    "require": ["dotenv/config","tsconfig-paths/register"]
+    "require": ["dotenv/config", "tsconfig-paths/register"]
   }
 }
