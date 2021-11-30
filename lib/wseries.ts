@@ -1,6 +1,5 @@
 import Event, { Series } from '@/types/event'
 import { Type } from '@/types/session'
-import { getFutureEvents } from '@/utils/events'
 import prisma from './prisma'
 
 const sessionMap = {
@@ -10,7 +9,7 @@ const sessionMap = {
 }
 
 export const getEvents = async (): Promise<Event[]> => {
-  const events = (await prisma.event.findMany({
+  return (await prisma.event.findMany({
     include: {
       sessions: {
         select: { id: true, name: true, type: true, unconfirmed: true, startTime: true, endTime: true },
@@ -30,6 +29,4 @@ export const getEvents = async (): Promise<Event[]> => {
       })),
       series: Series.WSeries
     }))
-
-  return getFutureEvents(events)
 }

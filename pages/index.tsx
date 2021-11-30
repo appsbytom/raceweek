@@ -7,38 +7,32 @@ import { getEvents as getF2Events } from '@/lib/f2f3/f2'
 import { getEvents as getF3Events } from '@/lib/f2f3/f3'
 import { getEvents as getFEEvents } from '@/lib/fe'
 import { getEvents as getWSeriesEvents } from '@/lib/wseries'
-import Event from '@/types/event'
+import { GroupedSession } from '@/types/week'
 import { groupIntoWeeks } from '@/utils/grouping'
+import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
 
 type Props = {
-  f1Events: Event[]
-  f2Events: Event[]
-  f3Events: Event[]
-  feEvents: Event[]
-  wseriesEvents: Event[]
+  sessions: GroupedSession[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const [f1Events, f2Events, f3Events, wseriesEvents] = await Promise.all([getF1Events(), getF2Events(), getF3Events(), getWSeriesEvents()])
-  const feEvents = getFEEvents()
+  const events = (await Promise.all([getF1Events(), getF2Events(), getF3Events(), getFEEvents(), getWSeriesEvents()])).flat()
+  const sessions = events
+    .filter(event => !event.provisional && dayjs(event.sessions[event.sessions.length - 1].endTime).isSameOrAfter(dayjs()))
+    .flatMap(event => event.sessions.map(session => ({ ...session, series: event.series, eventName: event.name })))
+    .sort((a, b) => Number(new Date(a.startTime)) - Number(new Date(b.startTime)))
 
   return {
-    props: {
-      f1Events,
-      f2Events,
-      f3Events,
-      feEvents,
-      wseriesEvents
-    }
+    props: { sessions }
   }
 }
 
-const Home = ({ f1Events, f2Events, f3Events, feEvents, wseriesEvents }: Props) => {
+const Home = ({ sessions }: Props) => {
   const isMounted = useMounted()
   const { followedSessions, timezone } = usePreferences()
 
-  const weeks = groupIntoWeeks(f1Events, f2Events, f3Events, feEvents, wseriesEvents, followedSessions, timezone)
+  const weeks = groupIntoWeeks(sessions, followedSessions, timezone)
 
   if (!isMounted) return null
 
