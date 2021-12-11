@@ -30,7 +30,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 const Home = ({ sessions }: Props) => {
   const isMounted = useMounted()
-  const { followedSessions, timezone } = usePreferences()
+  const { followedSessions, isFollowingSessions, timezone } = usePreferences()
 
   const weeks = groupIntoWeeks(sessions, followedSessions, timezone)
 
@@ -39,7 +39,12 @@ const Home = ({ sessions }: Props) => {
   return (
     <div className="max-w-2xl w-full mx-auto px-4 py-6">
       <Preferences />
-      {weeks.length > 0 && <WeekList weeks={weeks} />}
+      {weeks.length > 0 ? <WeekList weeks={weeks} /> : isFollowingSessions && (
+        <div className="text-center">
+          <h1 className="font-semibold">Season finished</h1>
+          <h2 className="text-gray-700">All the series' you follow have finished, check back next year</h2>
+        </div>
+      )}
     </div>
   )
 }

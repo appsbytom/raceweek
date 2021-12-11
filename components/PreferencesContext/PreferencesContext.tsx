@@ -40,8 +40,16 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(USE_24_HOUR_FORMAT_KEY, JSON.stringify(use24HourFormat))
   }
 
+  const preferences = {
+    followedSessions,
+    isFollowingSessions: Object.values(followedSessions).flat().length > 0,
+    timezone,
+    use24HourFormat,
+    save
+  }
+
   return (
-    <PreferencesContext.Provider value={{ followedSessions, timezone, use24HourFormat, save }}>
+    <PreferencesContext.Provider value={preferences}>
       {children}
     </PreferencesContext.Provider>
   )

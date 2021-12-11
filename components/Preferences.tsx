@@ -15,7 +15,7 @@ const sessions = [
 ]
 
 const Preferences = () => {
-  const { followedSessions: savedFollowedSessions, timezone: savedTimezone, use24HourFormat: savedUse24HourFormat, save: savePref } = usePreferences()
+  const { followedSessions: savedFollowedSessions, isFollowingSessions, timezone: savedTimezone, use24HourFormat: savedUse24HourFormat, save: savePref } = usePreferences()
   const [followedSessions, setFollowedSessions] = useState(savedFollowedSessions)
   const [timezone, setTimezone] = useState(savedTimezone)
   const [use24HourFormat, setUse24HourFormat] = useState(savedUse24HourFormat)
@@ -127,7 +127,7 @@ const Preferences = () => {
       ) : (
         <div className="sm:flex sm:justify-between sm:items-center">
           <div className="mb-3 text-center sm:text-left sm:mb-0 sm:w-2/3">
-            {Object.values(savedFollowedSessions).flat().length > 0 ? (
+            {isFollowingSessions ? (
               <>
                 <h1>You are following <strong>{getSeriesNames(series => savedFollowedSessions[series.value].length > 0)}</strong></h1>
                 <h2>Your timezone is {savedTimezone}</h2>

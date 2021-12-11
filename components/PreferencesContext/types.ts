@@ -10,6 +10,7 @@ export type FollowedSessionsPreferences = {
 
 export type Preferences = {
   followedSessions: FollowedSessionsPreferences
+  isFollowingSessions: boolean
   timezone: string
   use24HourFormat: boolean
 }
