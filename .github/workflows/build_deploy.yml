@@ -19,7 +19,7 @@ jobs:
 
       - name: Build and export
         env:
-          NEXT_PUBLIC_BASE_PATH: /racing-calendar
+          NEXT_PUBLIC_BASE_PATH: /raceweek
           F1_KEY: ${{ secrets.F1_KEY }}
           F2_KEY: ${{ secrets.F2_KEY }}
           F3_KEY: ${{ secrets.F3_KEY }}
