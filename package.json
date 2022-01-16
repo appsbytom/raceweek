@@ -19,7 +19,7 @@
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
     "next": "^12.0.4",
-    "next-transpile-modules": "^8.0.0",
+    "next-transpile-modules": "^9.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-timezone-select": "^1.1.15"
