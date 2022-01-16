@@ -1,16 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
-}
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model Event {
@@ -34,5 +33,6 @@ model Session {
   eventId     String   @map("event_id")
 
   @@id([id, eventId])
+  @@index([eventId])
   @@map("sessions")
 }
