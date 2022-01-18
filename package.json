@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/node": "^17.0.8",
     "@types/react": "^17.0.38",
-    "autoprefixer": "^10.3.7",
+    "autoprefixer": "^10.4.2",
     "postcss": "^8.3.11",
     "prisma": "^3.8.1",
     "tailwindcss": "^2.2.17",
