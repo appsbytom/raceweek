@@ -117,7 +117,7 @@ const Preferences = () => {
               Cancel
             </button>
             <button
-              className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 font-medium text-white hover:bg-green-700 sm:w-auto"
+              className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 font-medium text-white hover:bg-emerald-700 sm:w-auto"
               onClick={save}
             >
               Save
