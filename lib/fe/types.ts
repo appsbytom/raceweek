@@ -2,7 +2,7 @@ export type CalendarResponse = {
   events: EventResponse[]
 }
 
-export type EventResponse = {
+type EventResponse = {
   uuid: string
   name: string
   status: string

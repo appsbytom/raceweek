@@ -1,8 +1,9 @@
 import Event, { Series } from '@/types/event'
 import Session, { Type } from '@/types/session'
+import partition from '@/utils/partition'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import { CalendarResponse, EventResponse, Season, SeasonsResponse, SessionResponse } from './types'
+import { CalendarResponse, Season, SeasonsResponse, SessionResponse } from './types'
 
 const client = axios.create({
   baseURL: 'https://api.motorsportstats.com/widgets/1.0.0',
@@ -19,28 +20,18 @@ export const getEvents = async (): Promise<Event[]> => {
   const season = await getCurrentSeason()
   const { data } = await client.get<CalendarResponse>(`/seasons/${season.uuid}/calendar`)
 
-  const events: EventResponse[] = []
-  for (const event of data.events.filter(event => !event.status)) {
-    if (event.sessions.filter(session => session.shortCode === 'Race').length > 1) {
-      const firstRaceIndex = event.sessions.findIndex(session => session.shortCode === 'Race') + 1
-      events.push(
-        { ...event, sessions: event.sessions.slice(0, firstRaceIndex) },
-        { ...event, uuid: `${event.uuid}-2`, name: `${event.name} 2`, sessions: event.sessions.slice(firstRaceIndex) })
-    } else {
-      events.push(event)
-    }
-  }
-
-  return events.map(event => {
-    const hasSessions = event.sessions.length > 0
-    return {
-      id: event.uuid,
-      name: event.name,
-      sessions: hasSessions ? getSessions(event.sessions) : [],
-      provisional: !hasSessions,
-      series: Series.FE
-    }
-  })
+  return data.events
+    .filter(event => !event.status)
+    .map(event => {
+      const hasSessions = event.sessions.length > 0
+      return {
+        id: event.uuid,
+        name: event.name.replace('/', ' '),
+        sessions: hasSessions ? getSessions(event.sessions) : [],
+        provisional: !hasSessions,
+        series: Series.FE
+      }
+    })
 }
 
 const sessionMap = {
@@ -54,11 +45,11 @@ const sessionMap = {
 const isoFromUnix = unix => dayjs.unix(unix).toISOString()
 
 const getSessions = (sessions: SessionResponse[]): Session[] => {
-  const { 0: firstQualifying, length, [length - 1]: lastQualifying } = sessions.filter(session => session.shortCode.startsWith('Q'))
+  const [{ 0: firstQualifying, length, [length - 1]: lastQualifying }, otherSessions] = partition(sessions, item => item.shortCode.startsWith('Q'))
 
-  return sessions
-    .filter(session => !session.shortCode.startsWith('Q'))
+  return otherSessions
     .concat({ uuid: 'q', name: 'Qualifying', shortCode: 'Q', startTimeUtc: firstQualifying.startTimeUtc, endTimeUtc: lastQualifying.endTimeUtc })
+    .sort((a, b) => a.startTimeUtc - b.startTimeUtc)
     .map(session => ({
       id: session.uuid,
       name: session.name,
