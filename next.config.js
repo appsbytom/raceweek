@@ -1,6 +1,4 @@
-const withTM = require('next-transpile-modules')(['react-timezone-select'])
-
-module.exports = withTM({
+module.exports = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   reactStrictMode: true
-})
+}
