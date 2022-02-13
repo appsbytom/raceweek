@@ -3,9 +3,9 @@ import { Type } from '@/types/session'
 import { RacesResponse } from './types'
 
 const sessionMap = {
-  'PRACTICE': Type.Practice,
-  'QUALIFYING': Type.Qualifying,
-  'RESULT': Type.Race
+  PRACTICE: Type.Practice,
+  QUALIFYING: Type.Qualifying,
+  RESULT: Type.Race
 }
 
 export const mapResponseToData = (data: RacesResponse, series: Series): Event[] => data.Races.map(race => ({
@@ -20,5 +20,6 @@ export const mapResponseToData = (data: RacesResponse, series: Series): Event[] 
     endTime: session.SessionEndTime
   })),
   provisional: race.Provisional,
-  series
+  series,
+  raceDate: race.RaceEndDate
 }))

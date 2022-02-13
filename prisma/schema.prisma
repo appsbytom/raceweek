@@ -18,6 +18,7 @@ model Event {
   provisional Boolean   @default(false)
   series      String
   sessions    Session[]
+  raceDate    DateTime  @db.Date @map("race_date")
 
   @@map("events")
 }

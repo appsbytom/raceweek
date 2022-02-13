@@ -16,6 +16,8 @@ const getCurrentSeason = async (): Promise<Season> => {
   return data.find(season => season.status === 'Current')
 }
 
+const isoFromUnix = (unix: number) => dayjs.unix(unix).toISOString()
+
 export const getEvents = async (): Promise<Event[]> => {
   const season = await getCurrentSeason()
   const { data } = await client.get<CalendarResponse>(`/seasons/${season.uuid}/calendar`)
@@ -29,7 +31,8 @@ export const getEvents = async (): Promise<Event[]> => {
         name: event.name.replace('/', ' '),
         sessions: hasSessions ? getSessions(event.sessions) : [],
         provisional: !hasSessions,
-        series: Series.FE
+        series: Series.FE,
+        raceDate: isoFromUnix(event.endTimeUtc)
       }
     })
 }
@@ -42,10 +45,8 @@ const sessionMap = {
   Race: Type.Race
 }
 
-const isoFromUnix = unix => dayjs.unix(unix).toISOString()
-
 const getSessions = (sessions: SessionResponse[]): Session[] => {
-  const [{ 0: firstQualifying, length, [length - 1]: lastQualifying }, otherSessions] = partition(sessions, item => item.shortCode.startsWith('Q'))
+  const [{ 0: firstQualifying, length, [length - 1]: lastQualifying }, otherSessions] = partition(sessions, session => session.shortCode.startsWith('Q'))
 
   return otherSessions
     .concat({ uuid: 'q', name: 'Qualifying', shortCode: 'Q', startTimeUtc: firstQualifying.startTimeUtc, endTimeUtc: lastQualifying.endTimeUtc })

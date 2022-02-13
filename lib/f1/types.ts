@@ -6,6 +6,8 @@ type EventResponse = {
   type: string
   meetingName: string
   meetingKey: string
+  meetingEndDate: string
+  gmtOffset: string
 }
 
 export type SessionsResponse = {

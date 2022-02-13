@@ -84,7 +84,8 @@ const main = async () => {
               endTime: utcFormat(raceEnd)
             }
           ].filter(Boolean),
-          series: Series.WSeries
+          series: Series.WSeries,
+          raceDate: '2022-01-01'
         }
       }))
     const joinedEventIds = eventsWithSessions.map(event => event.id).join(', ')

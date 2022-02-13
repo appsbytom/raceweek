@@ -1,4 +1,4 @@
-import { Series } from './event'
+import Event, { Series } from './event'
 import Session from './session'
 
 type Week = {
@@ -9,6 +9,7 @@ type Week = {
 type Day = {
   date: string
   sessions: GroupedSession[]
+  provisionalEvents: Event[]
 }
 
 export type GroupedSession = Session & {

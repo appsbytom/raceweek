@@ -6,6 +6,7 @@ type Event = {
   sessions: Session[]
   provisional: boolean
   series: Series
+  raceDate: string
 }
 
 export enum Series {

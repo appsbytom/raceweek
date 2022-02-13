@@ -7,6 +7,7 @@ type EventResponse = {
   name: string
   status: string
   sessions: SessionResponse[]
+  endTimeUtc: number
 }
 
 export type SessionResponse = {

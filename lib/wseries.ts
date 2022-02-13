@@ -3,9 +3,9 @@ import { Type } from '@/types/session'
 import prisma from './prisma'
 
 const sessionMap = {
-  'p': Type.Practice,
-  'q': Type.Qualifying,
-  'r': Type.Race
+  p: Type.Practice,
+  q: Type.Qualifying,
+  r: Type.Race
 }
 
 export const getEvents = async (): Promise<Event[]> => {
@@ -27,6 +27,7 @@ export const getEvents = async (): Promise<Event[]> => {
         startTime: session.startTime.toISOString(),
         endTime: session.endTime.toISOString()
       })),
-      series: Series.WSeries
+      series: Series.WSeries,
+      raceDate: event.raceDate.toISOString()
     }))
 }
