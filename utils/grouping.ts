@@ -40,6 +40,6 @@ export const getWeeks = (sessions: GroupedSession[], provisionalEvents: Event[],
       date,
       sessions,
       provisionalEvents
-    })),
+    })).sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date))),
   })).sort((a, b) => a.number - b.number)
 }
