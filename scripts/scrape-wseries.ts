@@ -2,13 +2,25 @@ import prisma from '@/lib/prisma'
 import { Series } from '@/types/event'
 import { Type } from '@/types/session'
 import axios from 'axios'
-import cheerio from 'cheerio'
+import cheerio, { Cheerio, Element } from 'cheerio'
 import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
+dayjs.extend(customParseFormat)
+dayjs.extend(timezone)
 dayjs.extend(utc)
 
-const utcFormat = date => dayjs.utc(date).format()
+const getISO = (date: string, time: string, timezone: string) => dayjs.tz(`${date} ${time}`, 'D MMMM HH:mm', timezone).toISOString()
+
+const getTrimmedText = (element: Cheerio<Element>) => element.text().trim()
+
+const getSessionType = (name: string): Type => {
+  if (name.includes('Practice')) return Type.Practice
+  else if (name.includes('Qualifying')) return Type.Qualifying
+  else return Type.Race
+}
 
 const CONSOLE_WRAPPER = '---------- WSERIES SCRAPER ----------'
 
@@ -20,10 +32,16 @@ const main = async () => {
   const events = $('a.race').map((i, el) => {
     const element = $(el)
     const link = element.attr('href')
-    const status = element.find('span.race__status').text().trim()
-    const name = element.find('h3.race__name').text().trim()
+    const status = getTrimmedText(element.find('.race__status'))
+    const name = getTrimmedText(element.find('.race__name'))
 
-    return { link, status, name, id: new URL(link).pathname.split('/')[2] }
+    return {
+      link,
+      status,
+      name,
+      id: new URL(link).pathname.split('/')[2],
+      date: dayjs.utc(getTrimmedText(element.find('.race__date span').last()), 'DD MMMM').format()
+    }
   }).get().filter(event => event.id);
 
   const sessionIds = events.map(event => ({ eventId: event.id }))
@@ -57,35 +75,28 @@ const main = async () => {
       .map(async event => {
         const { data } = await axios.get<string>(event.link)
         const $ = cheerio.load(data)
-        const { practiceStart, practiceEnd, qualifyingStart, qualifyingEnd, raceStart, raceEnd } = $('div.countdown').data() as Record<string, string>
+        const timezone = ($('.race__schedule__toggle[data-value=local]').data('timezone') as string).replace(/\b\w|_\w/g, match => match.toUpperCase())
+        const sessions = $('.table--local tbody tr').map((i, el) => {
+          const element = $(el)
+          const name = getTrimmedText(element.find('.race__schedule__table__title'))
+          const nameNumberMatch = name.match(/\d$/)
+          const sessionType = getSessionType(name)
+          const date = getTrimmedText(element.find('.race__schedule__table__date'))
+          const [startTime, endTime] = getTrimmedText(element.find('.race__schedule__table__time')).split('–')
+          return {
+            id: nameNumberMatch ? `${sessionType}-${nameNumberMatch[0]}` : sessionType,
+            name,
+            type: sessionType,
+            startTime: getISO(date, startTime, timezone),
+            endTime: getISO(date, endTime, timezone)
+          }
+        }).get()
         return {
           id: event.id,
           name: event.name,
-          sessions: [
-            (practiceStart && practiceEnd) && {
-              id: Type.Practice,
-              name: 'Practice',
-              type: Type.Practice,
-              startTime: utcFormat(practiceStart),
-              endTime: utcFormat(practiceEnd)
-            },
-            (qualifyingStart && qualifyingEnd) && {
-              id: Type.Qualifying,
-              name: 'Qualifying',
-              type: Type.Qualifying,
-              startTime: utcFormat(qualifyingStart),
-              endTime: utcFormat(qualifyingEnd)
-            },
-            {
-              id: Type.Race,
-              name: 'Race',
-              type: Type.Race,
-              startTime: utcFormat(raceStart),
-              endTime: utcFormat(raceEnd)
-            }
-          ].filter(Boolean),
+          sessions,
           series: Series.WSeries,
-          raceDate: '2022-01-01'
+          raceDate: event.date
         }
       }))
     const joinedEventIds = eventsWithSessions.map(event => event.id).join(', ')
