@@ -13,6 +13,10 @@ jobs:
         with:
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || '' }}
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
       - uses: actions/cache@v2
         with:
           path: ${{ github.workspace }}/.next/cache
