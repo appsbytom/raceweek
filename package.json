@@ -10,13 +10,13 @@
     "scrape-events": "ts-node scripts/scrape-wseries.ts"
   },
   "dependencies": {
-    "@headlessui/react": "^1.4.3",
+    "@headlessui/react": "^1.6.0",
     "@heroicons/react": "^1.0.5",
     "@prisma/client": "^3.12.0",
     "axios": "^0.27.0",
     "cheerio": "^1.0.0-rc.10",
     "classnames": "^2.3.1",
-    "dayjs": "^1.10.7",
+    "dayjs": "^1.11.1",
     "dotenv": "^16.0.0",
     "next": "^12.0.10",
     "react": "^17.0.2",
