@@ -23,9 +23,11 @@ const getSessionType = (name: string): Type => {
 }
 
 const CONSOLE_WRAPPER = '---------- WSERIES SCRAPER ----------'
+const DUMMY = 'dummy'
 
 const main = async () => {
   console.log(CONSOLE_WRAPPER)
+  await prisma.event.create({ data: { id: DUMMY, name: DUMMY, series: DUMMY, raceDate: '1970-01-01T00:00:00.000Z' }})
 
   const { data } = await axios.get<string>('https://wseries.com')
   const $ = cheerio.load(data)
@@ -124,6 +126,7 @@ const main = async () => {
     console.log('Upserted %s with scraped event and sessions data', joinedEventIds)
   }
 
+  await prisma.event.delete({ where: { id: DUMMY }})
   console.log(CONSOLE_WRAPPER)
 }
 
