@@ -41,7 +41,7 @@ const main = async () => {
       link,
       status,
       name,
-      id: new URL(link).pathname.split('/')[2],
+      id: new URL(link).pathname.split('/').filter(Boolean).at(-1),
       date: dayjs.utc(getTrimmedText(element.find('.race__date span').last()), 'DD MMMM').format()
     }
   }).get().filter(event => event.id);
