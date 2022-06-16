@@ -12,13 +12,11 @@ export const getEvents = async (): Promise<Event[]> => {
   return (await prisma.event.findMany({
     include: {
       sessions: {
-        select: { id: true, name: true, type: true, unconfirmed: true, startTime: true, endTime: true },
-        orderBy: { startTime: 'asc' }
+        select: { id: true, name: true, type: true, unconfirmed: true, startTime: true, endTime: true }
       }
     },
     where: { series: Series.WSeries }
   }))
-    .sort((a, b) => Number(a.sessions[0].startTime) - Number(b.sessions[0].startTime))
     .map(event => ({
       ...event,
       sessions: event.sessions.map(session => ({

@@ -77,7 +77,20 @@ const main = async () => {
       .map(async event => {
         const { data } = await axios.get<string>(event.link)
         const $ = cheerio.load(data)
-        const timezone = ($('.race__schedule__toggle[data-value=local]').data('timezone') as string).replace(/\b\w|_\w/g, match => match.toUpperCase())
+
+        const eventData = {
+          id: event.id,
+          name: event.name,
+          series: Series.WSeries,
+          raceDate: event.date,
+        }
+
+        const localScheduleToggle = $('.race__schedule__toggle[data-value=local]')
+        if (localScheduleToggle.length <= 0) {
+          return { ...eventData, sessions: [], provisional: true }
+        }
+
+        const timezone = (localScheduleToggle.data('timezone') as string).replace(/\b\w|_\w/g, match => match.toUpperCase())
         const sessions = $('.table--local tbody tr').map((i, el) => {
           const element = $(el)
           const name = getTrimmedText(element.find('.race__schedule__table__title'))
@@ -93,13 +106,8 @@ const main = async () => {
             endTime: getISO(date, endTime, timezone)
           }
         }).get()
-        return {
-          id: event.id,
-          name: event.name,
-          sessions,
-          series: Series.WSeries,
-          raceDate: event.date
-        }
+
+        return { ...eventData, sessions, provisional: false }
       }))
     const joinedEventIds = eventsWithSessions.map(event => event.id).join(', ')
     console.log('Scraped sessions data for: %s', joinedEventIds)
@@ -115,7 +123,8 @@ const main = async () => {
               update: { startTime: session.startTime, endTime: session.endTime },
               create: session
             }))
-          }
+          },
+          provisional: event.provisional,
         },
         create: {
           ...event,
