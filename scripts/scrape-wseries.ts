@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import * as process from 'process'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(timezone)
@@ -136,6 +137,15 @@ const main = async () => {
   }
 
   await prisma.event.delete({ where: { id: DUMMY }})
+
+  console.log('')
+  try {
+    await axios.get(`${process.env.APP_URL}/api/revalidate`, { headers: { token: process.env.TOKEN }})
+    console.log('Revalidated!')
+  } catch (e) {
+    console.log('Failed to revalidate:', e.response.data.message)
+  }
+
   console.log(CONSOLE_WRAPPER)
 }
 
