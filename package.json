@@ -10,7 +10,7 @@
     "scrape-events": "ts-node scripts/scrape-wseries.ts"
   },
   "dependencies": {
-    "@headlessui/react": "^1.6.5",
+    "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "@prisma/client": "^4.0.0",
     "axios": "^0.27.2",
