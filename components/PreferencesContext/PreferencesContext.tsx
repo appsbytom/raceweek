@@ -70,11 +70,11 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
         })
       setIsLinkedToAccount(true)
       setIsSaving(false)
+    } else {
+      localStorage.setItem(FOLLOWED_SESSIONS_KEY, JSON.stringify(followedSessions))
+      localStorage.setItem(TIMEZONE_KEY, timezone)
+      localStorage.setItem(USE_24_HOUR_FORMAT_KEY, JSON.stringify(use24HourFormat))
     }
-
-    localStorage.setItem(FOLLOWED_SESSIONS_KEY, JSON.stringify(followedSessions))
-    localStorage.setItem(TIMEZONE_KEY, timezone)
-    localStorage.setItem(USE_24_HOUR_FORMAT_KEY, JSON.stringify(use24HourFormat))
   }
 
   const preferences = {
