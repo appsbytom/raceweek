@@ -18,7 +18,7 @@ model Event {
   provisional Boolean   @default(false)
   series      String
   sessions    Session[]
-  raceDate    DateTime  @db.Date @map("race_date")
+  raceDate    DateTime  @map("race_date") @db.Date
 
   @@map("events")
 }
@@ -36,4 +36,15 @@ model Session {
   @@id([id, eventId])
   @@index([eventId])
   @@map("sessions")
+}
+
+model Preference {
+  id               String
+  provider         String
+  timezone         String
+  use24HourFormat  Boolean @default(false)
+  followedSessions Json
+
+  @@id([id, provider])
+  @@map("preferences")
 }

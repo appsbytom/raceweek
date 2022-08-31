@@ -1,7 +1,8 @@
+import MigratePreferences from '@/components/MigratePreferences'
 import Preferences from '@/components/Preferences'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
+import Spinner from '@/components/Spinner'
 import WeekList from '@/components/WeekList'
-import useMounted from '@/hooks/useMounted'
 import { getEvents as getF1Events } from '@/lib/f1/f1'
 import { getEvents as getF2Events } from '@/lib/f2f3/f2'
 import { getEvents as getF3Events } from '@/lib/f2f3/f3'
@@ -13,6 +14,7 @@ import { getWeeks } from '@/utils/grouping'
 import partition from '@/utils/partition'
 import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   sessions: GroupedSession[]
@@ -37,15 +39,22 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 }
 
 const Home = ({ sessions, provisionalEvents }: Props) => {
-  const isMounted = useMounted()
-  const { followedSessions, isFollowingSessions, timezone } = usePreferences()
+  const { status } = useSession()
+  const { followedSessions, isFollowingSessions, timezone, isLoading } = usePreferences()
 
   const weeks = getWeeks(sessions, provisionalEvents, followedSessions, timezone)
 
-  if (!isMounted) return null
+  if (status === 'loading' || (status === 'authenticated' && isLoading)) {
+    return (
+      <div className="flex items-center justify-center">
+        <Spinner className="h-8 w-8 border-black" />
+      </div>
+    )
+  }
 
   return (
-    <div className="max-w-2xl w-full mx-auto px-4 py-6">
+    <>
+      <MigratePreferences />
       <Preferences />
       {weeks.length > 0 ? <WeekList weeks={weeks} /> : isFollowingSessions && (
         <div className="text-center">
@@ -53,7 +62,7 @@ const Home = ({ sessions, provisionalEvents }: Props) => {
           <h2 className="text-gray-700">All the series' you follow have finished, check back next year</h2>
         </div>
       )}
-    </div>
+    </>
   )
 }
 
