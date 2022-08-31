@@ -15,4 +15,9 @@ export type Preferences = {
   use24HourFormat: boolean
 }
 
-export type ActionablePreferences = Preferences & { save: (followedSessions: FollowedSessionsPreferences, timezone: string, use24HourFormat: boolean) => void }
+export type ActionablePreferences = Preferences & {
+  save: (followedSessions: FollowedSessionsPreferences, timezone: string, use24HourFormat: boolean) => Promise<void>
+  isLoading: boolean
+  isLinkedToAccount: boolean
+  isSaving: boolean
+}
