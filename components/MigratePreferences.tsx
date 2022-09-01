@@ -93,7 +93,7 @@ const MigratePreferences = () => {
                 className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-[#4285F4] hover:bg-[#4285F4]/90 sm:w-auto"
                 onClick={() => signOut()}
               >
-                Sign out
+                Logout
               </button>
             </div>
           </>
