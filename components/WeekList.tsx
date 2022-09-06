@@ -29,7 +29,17 @@ const WeekList = ({ weeks }: Props) => {
             {({ open }) => (
               <li>
                 <DisclosureChevronButton open={open}>
-                  <h1>{days.length > 1 ? `${firstDayFormatted} - ${format(dayjs(lastDayDate).tz(timezone))}` : firstDayFormatted}</h1>
+                  {number === dayjs().tz(timezone).isoWeek() ? (
+                    <div className="bg-gray-100 flex items-center px-2.5 py-0.5 rounded gap-2">
+                      <div className="relative h-2 w-2">
+                        <div className="animate-ping absolute h-full w-full rounded-full bg-black" />
+                        <div className="relative rounded-full h-full bg-black" />
+                      </div>
+                      <h1 className="text-sm font-medium">It's race week!</h1>
+                    </div>
+                  ) : (
+                    <h1>{days.length > 1 ? `${firstDayFormatted} - ${format(dayjs(lastDayDate).tz(timezone))}` : firstDayFormatted}</h1>
+                  )}
                   <small className="font-bold">{getSeriesNames(series => includedSeries.includes(series.value))}</small>
                 </DisclosureChevronButton>
                 <Disclosure.Panel as="ol" className="space-y-2 mt-1">
