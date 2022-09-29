@@ -1,13 +1,14 @@
 import { Series } from '@/types/event'
 import { Type } from '@/types/session'
 import { ALL_SERIES } from '@/utils/series'
-import { Disclosure, Switch } from '@headlessui/react'
+import { Switch } from '@headlessui/react'
 import classNames from 'classnames'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import TimezoneSelect from 'react-timezone-select'
-import DisclosureChevronButton from './DisclosureChevronButton'
+import AccordionChevronTrigger from './AccordionChevronTrigger'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
 import Spinner from './Spinner'
+import * as Accordion from '@radix-ui/react-accordion'
 
 const sessions = [
   { value: Type.Practice, name: 'Practice' },
@@ -20,6 +21,7 @@ const EditPreferences = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boo
   const [followedSessions, setFollowedSessions] = useState(savedFollowedSessions)
   const [timezone, setTimezone] = useState(savedTimezone)
   const [use24HourFormat, setUse24HourFormat] = useState(savedUse24HourFormat)
+  const [expandedSeries, setExpandedSeries] = useState(Object.entries(followedSessions).filter(([_, value]) => value.length > 0).map(([key]) => key))
 
   const save = async () => {
     await savePref(followedSessions, timezone, use24HourFormat)
@@ -45,39 +47,35 @@ const EditPreferences = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boo
   return (
     <>
       <div className="mb-4">
-        <div className="grid gap-2 mb-3 sm:grid-cols-2">
+        <Accordion.Root className="grid gap-2 mb-3 sm:grid-cols-2" type="multiple" value={expandedSeries} onValueChange={setExpandedSeries}>
           {ALL_SERIES.map(({ value: seriesValue, name: seriesName }) => {
             const seriesFollowedSessions = followedSessions[seriesValue]
             return (
-              <Disclosure key={seriesValue} defaultOpen={seriesFollowedSessions.length > 0}>
-                {({ open }) => (
-                  <div>
-                    <DisclosureChevronButton className="w-full" open={open}>
-                      <h2 className="text-black">{seriesName}</h2>
-                    </DisclosureChevronButton>
-                    <Disclosure.Panel className="flex items-center space-x-4 mt-1">
-                      {sessions.map(({ value: sessionValue, name: sessionName }) => {
-                        const id = `${seriesValue}-${sessionValue}`
-                        return (
-                          <div key={id} className="flex items-center space-x-2">
-                            <input
-                              id={id}
-                              type="checkbox"
-                              value={sessionValue}
-                              checked={seriesFollowedSessions.includes(sessionValue)}
-                              onChange={event => onChange(event, seriesValue)}
-                            />
-                            <label htmlFor={id}>{sessionName}</label>
-                          </div>
-                        )
-                      })}
-                    </Disclosure.Panel>
-                  </div>
-                )}
-              </Disclosure>
+              <Accordion.Item key={seriesValue} value={seriesValue}>
+                <AccordionChevronTrigger className="w-full">
+                  <h2 className="text-black">{seriesName}</h2>
+                </AccordionChevronTrigger>
+                <Accordion.Content className="flex items-center space-x-4 mt-1">
+                  {sessions.map(({ value: sessionValue, name: sessionName }) => {
+                    const id = `${seriesValue}-${sessionValue}`
+                    return (
+                      <div key={id} className="flex items-center space-x-2">
+                        <input
+                          id={id}
+                          type="checkbox"
+                          value={sessionValue}
+                          checked={seriesFollowedSessions.includes(sessionValue)}
+                          onChange={event => onChange(event, seriesValue)}
+                        />
+                        <label htmlFor={id}>{sessionName}</label>
+                      </div>
+                    )
+                  })}
+                </Accordion.Content>
+              </Accordion.Item>
             )
           })}
-        </div>
+        </Accordion.Root>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label htmlFor="timezoneSelect" className="block mb-2">Timezone</label>
