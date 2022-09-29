@@ -1,6 +1,6 @@
 import { FOLLOWED_SESSIONS_KEY, getLocalPreferences, TIMEZONE_KEY, USE_24_HOUR_FORMAT_KEY } from '@/utils/preferences'
 import { Dialog } from '@headlessui/react'
-import { ExclamationIcon } from '@heroicons/react/outline'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
@@ -29,7 +29,7 @@ const MigratePreferencesModal = ({ setIsOpen, isOpen }: { setIsOpen: Dispatch<Se
           <Dialog.Panel className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
             <div className="flex flex-col gap-4 sm:flex-row">
               <div className="h-12 w-12 rounded-full bg-red-100 mx-auto flex shrink-0 justify-center items-center">
-                <ExclamationIcon className="h-6 text-red-600" />
+                <ExclamationTriangleIcon className="h-6 text-red-600" />
               </div>
               <div className="text-center sm:text-left">
                 <Dialog.Title as="h3" className="text-lg font-medium">
