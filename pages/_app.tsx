@@ -1,4 +1,5 @@
 import PreferencesProvider from '@/components/PreferencesContext/PreferencesContext'
+import { Analytics } from '@vercel/analytics/react'
 import dayjs from 'dayjs'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
@@ -25,6 +26,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
       <PreferencesProvider>
         <div className="max-w-2xl w-full mx-auto px-4 py-6">
           <Component {...pageProps} />
+          <Analytics />
         </div>
       </PreferencesProvider>
     </SessionProvider>
