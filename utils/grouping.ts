@@ -3,20 +3,22 @@ import Event from '@/types/event'
 import Week, { GroupedSession } from '@/types/week'
 import dayjs from 'dayjs'
 
-type Weeks = Map<number, Map<string, { sessions: GroupedSession[], provisionalEvents: Event[] }>>
+type Weeks = Map<string, Map<string, { sessions: GroupedSession[], provisionalEvents: Event[] }>>
+
+const DATE_FORMAT = 'YYYY-MM-DD'
 
 const getDay = (weeks: Weeks, date: dayjs.Dayjs) => {
-  const weekNumber = date.isoWeek()
-  const dayKey = date.format('YYYY/MM/DD')
+  const weekKey = `${date.startOf('isoWeek').format(DATE_FORMAT)}_${date.isoWeek()}`
+  const dayKey = date.format(DATE_FORMAT)
 
-  if (!weeks.has(weekNumber)) {
-    weeks.set(weekNumber, new Map())
+  if (!weeks.has(weekKey)) {
+    weeks.set(weekKey, new Map())
   }
-  if (!weeks.get(weekNumber).has(dayKey)) {
-    weeks.get(weekNumber).set(dayKey, { sessions: [], provisionalEvents: [] })
+  if (!weeks.get(weekKey).has(dayKey)) {
+    weeks.get(weekKey).set(dayKey, { sessions: [], provisionalEvents: [] })
   }
 
-  return weeks.get(weekNumber).get(dayKey)
+  return weeks.get(weekKey).get(dayKey)
 }
 
 export const getWeeks = (sessions: GroupedSession[], provisionalEvents: Event[], followedSessions: FollowedSessionsPreferences, timezone: string): Week[] => {
@@ -34,12 +36,16 @@ export const getWeeks = (sessions: GroupedSession[], provisionalEvents: Event[],
     provisionalEvents.push(event)
   }
 
-  return Array.from(weeks, ([number, days]) => ({
-    number,
-    days: Array.from(days, ([date, { sessions, provisionalEvents }]) => ({
+  return Array.from(weeks, ([key, days]) => {
+    const [date, weekNumber] = key.split('_')
+    return {
       date,
-      sessions,
-      provisionalEvents
-    })).sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date))),
-  })).sort((a, b) => a.number - b.number)
+      weekNumber: Number(weekNumber),
+      days: Array.from(days, ([date, { sessions, provisionalEvents }]) => ({
+        date,
+        sessions,
+        provisionalEvents
+      })).sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date))),
+    };
+  }).sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)))
 }

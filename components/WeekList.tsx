@@ -19,23 +19,23 @@ const WeekList = ({ weeks }: Props) => {
   const [expanded, setExpanded] = useState<string[]>([])
 
   useEffect(() => {
-    setExpanded([String(weeks[0].number)])
+    setExpanded([weeks[0].date])
   }, [weeks])
 
   return (
     <Accordion.Root type="multiple" value={expanded} onValueChange={setExpanded} asChild>
       <ol className="space-y-4">
-        {weeks.map(({ number, days }) => {
+        {weeks.map(({ date, weekNumber, days }) => {
           const { 0: { date: firstDayDate }, [days.length - 1]: { date: lastDayDate }} = days
           const firstDayFormatted = format(dayjs(firstDayDate).tz(timezone))
 
           const includedSeries = days.flatMap(day => [...day.sessions.map(session => session.series), ...day.provisionalEvents.map(event => event.series)])
 
           return (
-            <Accordion.Item key={number} value={String(number)} asChild>
+            <Accordion.Item key={date} value={date} asChild>
               <li>
                 <AccordionChevronTrigger>
-                  {number === dayjs().tz(timezone).isoWeek() ? (
+                  {weekNumber === dayjs().tz(timezone).isoWeek() ? (
                     <div className="bg-gray-100 flex items-center px-2.5 py-0.5 rounded gap-2">
                       <div className="relative h-2 w-2">
                         <div className="animate-ping absolute h-full w-full rounded-full bg-black" />

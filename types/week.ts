@@ -2,7 +2,8 @@ import Event, { Series } from './event'
 import Session from './session'
 
 type Week = {
-  number: number
+  date: string
+  weekNumber: number
   days: Day[]
 }
 
