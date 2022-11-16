@@ -1,7 +1,7 @@
 import { FOLLOWED_SESSIONS_KEY, getLocalPreferences, TIMEZONE_KEY, USE_24_HOUR_FORMAT_KEY } from '@/utils/preferences'
 import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
 import Spinner from './Spinner'
@@ -69,45 +69,41 @@ const MigratePreferences = () => {
   const { isLinkedToAccount } = usePreferences()
   const [isOpen, setIsOpen] = useState(false)
 
+  const getMessage = () => {
+    if (data) {
+      if (isLinkedToAccount) {
+        return 'Your preferences and account are linked and will be used across any device logged in to this account'
+      } else {
+        return 'Your preferences are not linked to your account, migrate or update them manually'
+      }
+    }
+
+    return 'Share your preferences between devices and keep up to date wherever you are'
+  }
+
   return (
     <>
       <MigratePreferencesModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <div className="rounded-lg shadow px-3 py-4 mb-3 sm:flex sm:justify-between sm:items-center">
+      <div className="rounded-md border border-red-800 p-4 mt-5 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+        <div>
+          <h2 className="text-lg font-semibold">Migrate your preferences</h2>
+          <p className="text-gray-700">{getMessage()}</p>
+        </div>
         {data ? (
-          <>
-            <div className="mb-3 text-center sm:text-left sm:mb-0">
-              {isLinkedToAccount ? (
-                <p>Your preferences and account are linked and will be used across any device logged in to this account</p>
-              ) : (
-                <p>Your preferences are not linked to your account, migrate or update them manually</p>
-              )}
-            </div>
-            <div className="flex gap-2 shrink-0 sm:ml-4">
-              <button
-                className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-red-600 hover:bg-red-700 sm:w-auto"
-                onClick={() => setIsOpen(true)}
-              >
-                Migrate
-              </button>
-              <button
-                className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-[#4285F4] hover:bg-[#4285F4]/90 sm:w-auto"
-                onClick={() => signOut()}
-              >
-                Logout
-              </button>
-            </div>
-          </>
+          <button
+            className="w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-red-600 hover:bg-red-700 sm:w-auto"
+            onClick={() => setIsOpen(true)}
+          >
+            Migrate
+          </button>
         ) : (
-          <>
-            <p className="mb-3 text-center sm:text-left sm:mb-0">Login to share your preferences between devices and keep up to date wherever you are</p>
-            <button
-              className="flex items-center justify-center shrink-0 w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-[#4285F4] hover:bg-[#4285F4]/90 sm:w-auto sm:ml-4"
-              onClick={() => signIn('google')}
-            >
-              <svg className="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
-              Login with Google
-            </button>
-          </>
+          <button
+            className="flex items-center justify-center shrink-0 w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-[#4285F4] hover:bg-[#4285F4]/90 sm:w-auto"
+            onClick={() => signIn('google')}
+          >
+            <svg className="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+            Login with Google
+          </button>
         )}
       </div>
     </>

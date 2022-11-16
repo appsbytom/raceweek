@@ -1,7 +1,6 @@
-import MigratePreferences from '@/components/MigratePreferences'
-import Preferences from '@/components/Preferences'
+import Message from '@/components/Message';
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
-import Spinner from '@/components/Spinner'
+import SkeletonWeekList from '@/components/SkeletonWeekList';
 import WeekList from '@/components/WeekList'
 import { getEvents as getF1Events } from '@/lib/f1/f1'
 import { getEvents as getF2Events } from '@/lib/f2f3/f2'
@@ -15,11 +14,15 @@ import partition from '@/utils/partition'
 import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 type Props = {
   sessions: GroupedSession[]
   provisionalEvents: Event[]
+  skeletonActivityCounts: number[]
 }
+
+const getRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const events = (await Promise.all([getF1Events(), getF2Events(), getF3Events(), getFEEvents(), getWSeriesEvents()])).flat()
@@ -33,37 +36,39 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   return {
     props: {
       sessions,
-      provisionalEvents: provisionalEvents.sort((a, b) => Number(new Date(a.raceDate)) - Number(new Date(b.raceDate)))
+      provisionalEvents: provisionalEvents.sort((a, b) => Number(new Date(a.raceDate)) - Number(new Date(b.raceDate))),
+      skeletonActivityCounts: Array.from({ length: getRandomNumber(5, 10) }, () => getRandomNumber(1, 3)),
     }
   }
 }
 
-const Home = ({ sessions, provisionalEvents }: Props) => {
+const Home = ({ sessions, provisionalEvents, skeletonActivityCounts }: Props) => {
   const { status } = useSession()
   const { followedSessions, isFollowingSessions, timezone, isLoading } = usePreferences()
 
-  const weeks = getWeeks(sessions, provisionalEvents, followedSessions, timezone)
+  if (status === 'loading' || isLoading) {
+    return <SkeletonWeekList activityCounts={skeletonActivityCounts} />
+  }
 
-  if (status === 'loading' || (status === 'authenticated' && isLoading)) {
+  if (!isFollowingSessions) {
     return (
-      <div className="flex items-center justify-center">
-        <Spinner className="h-8 w-8 border-black" />
-      </div>
+      <Message title="No series' followed" description="Get started by selecting the series’ you are interested in and setup your account">
+        <Link href="/preferences">
+          <a className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md font-medium mt-3 hover:bg-gray-50 sm:w-auto">
+            Set your preferences
+          </a>
+        </Link>
+      </Message>
     )
   }
 
-  return (
-    <>
-      <MigratePreferences />
-      <Preferences />
-      {weeks.length > 0 ? <WeekList weeks={weeks} /> : isFollowingSessions && (
-        <div className="text-center">
-          <h1 className="font-semibold">Season finished</h1>
-          <h2 className="text-gray-700">All the series' you follow have finished, check back next year</h2>
-        </div>
-      )}
-    </>
-  )
+  const weeks = getWeeks(sessions, provisionalEvents, followedSessions, timezone)
+
+  if (weeks.length <= 0) {
+    return <Message title="Season finished" description="All the series' you follow have finished, check back next year" />
+  }
+
+  return <WeekList weeks={weeks} />
 }
 
 export default Home

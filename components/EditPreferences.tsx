@@ -2,13 +2,13 @@ import { Series } from '@/types/event'
 import { Type } from '@/types/session'
 import { ALL_SERIES } from '@/utils/series'
 import { Switch } from '@headlessui/react'
+import * as Accordion from '@radix-ui/react-accordion'
 import classNames from 'classnames'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import TimezoneSelect from 'react-timezone-select'
 import AccordionChevronTrigger from './AccordionChevronTrigger'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
 import Spinner from './Spinner'
-import * as Accordion from '@radix-ui/react-accordion'
 
 const sessions = [
   { value: Type.Practice, name: 'Practice' },
@@ -16,23 +16,29 @@ const sessions = [
   { value: Type.Race, name: 'Race' }
 ]
 
-const EditPreferences = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
+const EditPreferences = () => {
   const { followedSessions: savedFollowedSessions, timezone: savedTimezone, use24HourFormat: savedUse24HourFormat, save: savePref, isSaving } = usePreferences()
   const [followedSessions, setFollowedSessions] = useState(savedFollowedSessions)
   const [timezone, setTimezone] = useState(savedTimezone)
   const [use24HourFormat, setUse24HourFormat] = useState(savedUse24HourFormat)
-  const [expandedSeries, setExpandedSeries] = useState(Object.entries(followedSessions).filter(([_, value]) => value.length > 0).map(([key]) => key))
+  const [expandedSeries, setExpandedSeries] = useState([])
+  const [isSaved, setIsSaved] = useState(false)
+
+  useEffect(() => {
+    setTimezone(savedTimezone)
+    setUse24HourFormat(savedUse24HourFormat)
+  }, [savedTimezone, savedUse24HourFormat])
+
+  useEffect(() => {
+    setFollowedSessions(savedFollowedSessions)
+    setExpandedSeries(Object.entries(savedFollowedSessions).filter(([_, value]) => value.length > 0).map(([key]) => key))
+  }, [savedFollowedSessions])
 
   const save = async () => {
     await savePref(followedSessions, timezone, use24HourFormat)
-    setIsOpen(false)
-  }
+    setIsSaved(true)
 
-  const cancel = () => {
-    setFollowedSessions(savedFollowedSessions)
-    setTimezone(savedTimezone)
-    setUse24HourFormat(savedUse24HourFormat)
-    setIsOpen(false)
+    setTimeout(() => setIsSaved(false), 1000)
   }
 
   const onChange = (event: ChangeEvent<HTMLInputElement>, series: Series) => {
@@ -105,20 +111,14 @@ const EditPreferences = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boo
           </div>
         </div>
       </div>
-      <div className="flex gap-2 sm:justify-end">
-        <button
-          className="w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white font-medium hover:bg-gray-50 sm:w-auto"
-          onClick={cancel}
-        >
-          Cancel
-        </button>
+      <div className="flex sm:justify-end">
         <button
           className="flex items-center justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 font-medium text-white sm:w-auto hover:enabled:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-75"
           onClick={save}
           disabled={isSaving}
         >
           {isSaving && <Spinner className="w-4 h-4 mr-3 border-gray-200" />}
-          Save
+          {isSaved ? 'Saved!' : 'Save'}
         </button>
       </div>
     </>
