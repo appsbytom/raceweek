@@ -50,6 +50,7 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
       setFollowedSessions(followedSessions)
       setTimezone(timezone)
       setUse24HourFormat(use24HourFormat)
+      setIsLoading(false)
     }
   }, [status])
 

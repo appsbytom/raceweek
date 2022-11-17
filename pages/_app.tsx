@@ -1,3 +1,4 @@
+import Nav from '@/components/Nav';
 import PreferencesProvider from '@/components/PreferencesContext/PreferencesContext'
 import { Analytics } from '@vercel/analytics/react'
 import dayjs from 'dayjs'
@@ -24,7 +25,8 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
     </Head>
     <SessionProvider session={session}>
       <PreferencesProvider>
-        <div className="max-w-2xl w-full mx-auto px-4 py-6">
+        <Nav />
+        <div className="max-w-2xl w-full mx-auto px-4 py-5">
           <Component {...pageProps} />
           <Analytics />
         </div>
