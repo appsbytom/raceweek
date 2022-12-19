@@ -2,8 +2,8 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 const PreferencesLink = () => (
-  <Link href="/preferences">
-    <a className="hover:underline">Preferences</a>
+  <Link href="/preferences" className="hover:underline">
+    Preferences
   </Link>
 )
 
@@ -29,8 +29,8 @@ const NavProfile = () => {
 const Nav = () => (
   <nav className="px-4 py-3 border-b">
     <div className="flex justify-between items-center max-w-2xl mx-auto">
-      <Link href="/">
-        <a className="text-xl">raceweek</a>
+      <Link href="/" className="text-xl">
+        raceweek
       </Link>
       <NavProfile />
     </div>
