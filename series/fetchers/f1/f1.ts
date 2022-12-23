@@ -1,11 +1,12 @@
-import Event, { Series } from '@/types/event'
+import { Series } from '@/series/config'
+import Event from '@/types/event'
 import Session, { Type } from '@/types/session'
 import axios from 'axios'
 import { EventsResponse, SessionsResponse } from './types'
 
 const f1Client = axios.create({ baseURL: 'https://api.formula1.com/v1', headers: { apikey: process.env.F1_KEY }})
 
-export const getEvents = async (): Promise<Event[]> => {
+const getEvents = async (): Promise<Event[]> => {
   const { data } = await f1Client.get<EventsResponse>('/editorial-eventlisting/events')
 
   return Promise.all(data.events
@@ -22,6 +23,8 @@ export const getEvents = async (): Promise<Event[]> => {
       }
     }))
 }
+
+export default getEvents
 
 const sessionMap = {
   p1: Type.Practice,

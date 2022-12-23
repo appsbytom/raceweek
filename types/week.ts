@@ -1,4 +1,5 @@
-import Event, { Series } from './event'
+import { Series } from '@/series/config'
+import Event from './event'
 import Session from './session'
 
 type Week = {

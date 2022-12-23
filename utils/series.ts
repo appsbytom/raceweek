@@ -1,16 +1,13 @@
-import { Series } from '@/types/event'
+import SERIES_CONFIG, { Series } from '@/series/config'
 
 type NamedSeries = {
   value: Series
   name: string
 }
 
-export const ALL_SERIES: NamedSeries[] = [
-  { value: Series.F1, name: 'F1' },
-  { value: Series.F2, name: 'F2' },
-  { value: Series.F3, name: 'F3' },
-  { value: Series.FE, name: 'FE' },
-  { value: Series.WSeries, name: 'W Series' }
-]
+type SeriesType = typeof SERIES_CONFIG
+
+export const ALL_SERIES: NamedSeries[] = (Object.entries(SERIES_CONFIG) as Array<[keyof SeriesType, SeriesType[keyof SeriesType]]>)
+  .map(([key, value]) => ({ value: key, name: value.name }))
 
 export const getSeriesNames = (condition: (series: NamedSeries) => boolean) => ALL_SERIES.filter(condition).map(series => series.name).join(', ')

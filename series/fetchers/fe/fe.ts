@@ -1,4 +1,5 @@
-import Event, { Series } from '@/types/event'
+import { Series } from '@/series/config'
+import Event from '@/types/event'
 import Session, { Type } from '@/types/session'
 import partition from '@/utils/partition'
 import axios from 'axios'
@@ -18,7 +19,7 @@ const getCurrentSeason = async (): Promise<Season> => {
 
 const isoFromUnix = (unix: number) => dayjs.unix(unix).toISOString()
 
-export const getEvents = async (): Promise<Event[]> => {
+const getEvents = async (): Promise<Event[]> => {
   const season = await getCurrentSeason()
   const { data } = await client.get<CalendarResponse>(`/seasons/${season.uuid}/calendar`)
 
@@ -36,6 +37,8 @@ export const getEvents = async (): Promise<Event[]> => {
       }
     })
 }
+
+export default getEvents
 
 const sessionMap = {
   P1: Type.Practice,

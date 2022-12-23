@@ -1,4 +1,4 @@
-import { Series } from '@/types/event'
+import { Series } from '@/series/config'
 import { Type } from '@/types/session'
 import { ALL_SERIES } from '@/utils/series'
 import { Switch } from '@headlessui/react'

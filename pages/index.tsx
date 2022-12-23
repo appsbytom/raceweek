@@ -2,11 +2,7 @@ import Message from '@/components/Message';
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
 import SkeletonWeekList from '@/components/SkeletonWeekList';
 import WeekList from '@/components/WeekList'
-import { getEvents as getF1Events } from '@/lib/f1/f1'
-import { getEvents as getF2Events } from '@/lib/f2f3/f2'
-import { getEvents as getF3Events } from '@/lib/f2f3/f3'
-import { getEvents as getFEEvents } from '@/lib/fe/fe'
-import { getEvents as getWSeriesEvents } from '@/lib/wseries'
+import { getAllEvents } from '@/series/fetcher-config'
 import Event from '@/types/event'
 import { GroupedSession } from '@/types/week'
 import { getWeeks } from '@/utils/grouping'
@@ -25,7 +21,7 @@ type Props = {
 const getRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const events = (await Promise.all([getF1Events(), getF2Events(), getF3Events(), getFEEvents(), getWSeriesEvents()])).flat()
+  const events = await getAllEvents()
   const [provisionalEvents, confirmedEvents] = partition(events, event => event.provisional)
 
   const sessions = confirmedEvents

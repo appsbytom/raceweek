@@ -1,6 +1,7 @@
-import Event, { Series } from '@/types/event'
+import { Series } from '@/series/config'
+import Event from '@/types/event'
 import { Type } from '@/types/session'
-import prisma from './prisma'
+import prisma from '@/lib/prisma'
 
 const sessionMap = {
   p: Type.Practice,
@@ -8,7 +9,7 @@ const sessionMap = {
   r: Type.Race
 }
 
-export const getEvents = async (): Promise<Event[]> => {
+const getEvents = async (): Promise<Event[]> => {
   return (await prisma.event.findMany({
     include: {
       sessions: {
@@ -29,3 +30,5 @@ export const getEvents = async (): Promise<Event[]> => {
       raceDate: event.raceDate.toISOString()
     }))
 }
+
+export default getEvents

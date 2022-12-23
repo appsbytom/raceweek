@@ -1,7 +1,8 @@
+import { FollowedSessionsPreferences } from '@/components/PreferencesContext/types'
 import dayjs from 'dayjs'
 
 export const FOLLOWED_SESSIONS_KEY = 'followedSessions'
-export const DEFAULT_FOLLOWED_SESSIONS = {
+export const DEFAULT_FOLLOWED_SESSIONS: FollowedSessionsPreferences = {
   f1: [],
   f2: [],
   f3: [],

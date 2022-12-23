@@ -1,14 +1,9 @@
+import { SeriesMap } from '@/series/config';
 import { FollowedSessions } from '@/types/session'
 
-export type FollowedSessionsPreferences = {
-  f1: FollowedSessions
-  f2: FollowedSessions
-  f3: FollowedSessions
-  fe: FollowedSessions
-  wseries: FollowedSessions
-}
+export type FollowedSessionsPreferences = SeriesMap<FollowedSessions>
 
-export type Preferences = {
+type Preferences = {
   followedSessions: FollowedSessionsPreferences
   isFollowingSessions: boolean
   timezone: string

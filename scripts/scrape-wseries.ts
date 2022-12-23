@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma'
-import { Series } from '@/types/event'
+import { Series } from '@/series/config'
 import { Type } from '@/types/session'
 import axios from 'axios'
 import cheerio, { Cheerio, Element } from 'cheerio'

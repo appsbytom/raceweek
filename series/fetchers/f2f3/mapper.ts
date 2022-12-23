@@ -1,4 +1,5 @@
-import Event, { Series } from '@/types/event'
+import { Series } from '@/series/config'
+import Event from '@/types/event'
 import { Type } from '@/types/session'
 import { RacesResponse } from './types'
 
