@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/node": "^16.18.8",
     "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.9",
+    "@types/react-dom": "^18.0.10",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
     "prisma": "^4.7.1",
