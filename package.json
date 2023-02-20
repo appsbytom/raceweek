@@ -34,7 +34,7 @@
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
     "prisma": "^4.7.1",
-    "tailwindcss": "^3.1.8",
+    "tailwindcss": "^3.2.7",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.1",
     "typescript": "^4.8.4"
