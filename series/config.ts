@@ -3,8 +3,11 @@ export enum Series {
   F2 = 'f2',
   F3 = 'f3',
   FE = 'fe',
-  WSeries = 'wseries'
+  WSeries = 'wseries',
+  BTCC = 'btcc'
 }
+
+export type MotorsportStatsSeries = Series.FE | Series.BTCC
 
 export type SeriesMap<T> = { [key in Series]: T }
 
@@ -33,6 +36,10 @@ const SERIES_CONFIG: SeriesMap<SeriesInfo> = {
   [Series.WSeries]: {
     name: 'W Series',
     colours: 'bg-[#440099]'
+  },
+  [Series.BTCC]: {
+    name: 'BTCC',
+    colours: 'bg-[#020255]'
   }
 }
 

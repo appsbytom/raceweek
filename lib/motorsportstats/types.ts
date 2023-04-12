@@ -1,3 +1,5 @@
+import { Type } from '@/types/session'
+
 export type CalendarResponse = {
   events: EventResponse[]
 }
@@ -24,3 +26,5 @@ export type Season = {
   uuid: string
   status: string
 }
+
+export type SessionMap = { [key: string]: Type }

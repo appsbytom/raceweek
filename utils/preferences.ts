@@ -7,7 +7,8 @@ export const DEFAULT_FOLLOWED_SESSIONS: FollowedSessionsPreferences = {
   f2: [],
   f3: [],
   fe: [],
-  wseries: []
+  wseries: [],
+  btcc: []
 }
 export const TIMEZONE_KEY = 'timezone'
 export const USE_24_HOUR_FORMAT_KEY = 'use24HourFormat'
@@ -18,7 +19,7 @@ export const getLocalPreferences = () => {
   const storedUse24HourFormat = localStorage.getItem(USE_24_HOUR_FORMAT_KEY)
 
   return {
-    followedSessions: storedFollowedSessions ? JSON.parse(storedFollowedSessions) : DEFAULT_FOLLOWED_SESSIONS,
+    followedSessions: storedFollowedSessions ? { ...DEFAULT_FOLLOWED_SESSIONS, ...JSON.parse(storedFollowedSessions) } : DEFAULT_FOLLOWED_SESSIONS,
     timezone: storedTimezone || dayjs.tz.guess(),
     use24HourFormat: storedUse24HourFormat ? JSON.parse(storedUse24HourFormat) : false
   }

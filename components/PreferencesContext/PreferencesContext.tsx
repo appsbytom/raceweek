@@ -32,7 +32,7 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
       return
     }
     const { followedSessions, timezone, use24HourFormat } = preferences
-    setFollowedSessions(followedSessions)
+    setFollowedSessions(prev => ({ ...prev, ...followedSessions }))
     setTimezone(timezone)
     setUse24HourFormat(use24HourFormat)
     setIsLinkedToAccount(true)

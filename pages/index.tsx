@@ -1,6 +1,6 @@
-import Message from '@/components/Message';
+import Message from '@/components/Message'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
-import SkeletonWeekList from '@/components/SkeletonWeekList';
+import SkeletonWeekList from '@/components/SkeletonWeekList'
 import WeekList from '@/components/WeekList'
 import { getAllEvents } from '@/series/fetcher-config'
 import Event from '@/types/event'
@@ -32,7 +32,9 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   return {
     props: {
       sessions,
-      provisionalEvents: provisionalEvents.sort((a, b) => Number(new Date(a.raceDate)) - Number(new Date(b.raceDate))),
+      provisionalEvents: provisionalEvents
+        .filter(event => dayjs(event.raceDate).isSameOrAfter(dayjs()))
+        .sort((a, b) => Number(new Date(a.raceDate)) - Number(new Date(b.raceDate))),
       skeletonActivityCounts: Array.from({ length: getRandomNumber(5, 10) }, () => getRandomNumber(1, 3)),
     }
   }
