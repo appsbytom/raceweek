@@ -6,7 +6,8 @@ import { Type } from '@/types/session'
 const SESSION_TYPE_MAP = {
   P1: Type.Practice,
   P2: Type.Practice,
-  Q: Type.Qualifying,
+  Q1: Type.Qualifying,
+  Q2: Type.Qualifying,
   Race: Type.Race
 }
 
