@@ -1,14 +1,16 @@
 import { FollowedSessionsPreferences } from '@/components/PreferencesContext/types'
+import { Series } from '@/series/config'
 import dayjs from 'dayjs'
 
 export const FOLLOWED_SESSIONS_KEY = 'followedSessions'
 export const DEFAULT_FOLLOWED_SESSIONS: FollowedSessionsPreferences = {
-  f1: [],
-  f2: [],
-  f3: [],
-  fe: [],
-  wseries: [],
-  btcc: []
+  [Series.F1]: [],
+  [Series.F2]: [],
+  [Series.F3]: [],
+  [Series.FE]: [],
+  [Series.WSeries]: [],
+  [Series.BTCC]: [],
+  [Series.ExtremeE]: [],
 }
 export const TIMEZONE_KEY = 'timezone'
 export const USE_24_HOUR_FORMAT_KEY = 'use24HourFormat'

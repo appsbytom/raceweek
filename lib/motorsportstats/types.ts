@@ -4,7 +4,7 @@ export type CalendarResponse = {
   events: EventResponse[]
 }
 
-type EventResponse = {
+export type EventResponse = {
   uuid: string
   name: string
   status: string
@@ -28,3 +28,5 @@ export type Season = {
 }
 
 export type SessionMap = { [key: string]: Type }
+
+export type ProcessSessions = (sessions: SessionResponse[]) => SessionResponse[]

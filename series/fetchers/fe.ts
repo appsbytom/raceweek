@@ -19,4 +19,4 @@ const groupQualifying = (sessions: SessionResponse[]): SessionResponse[] => {
   return otherSessions.concat({ uuid: 'q', name: 'Qualifying', shortCode: 'Q', startTimeUtc: firstQualifying.startTimeUtc, endTimeUtc: lastQualifying.endTimeUtc })
 }
 
-export default async (): Promise<Event[]> => getSeriesEvents(Series.FE, groupQualifying, SESSION_TYPE_MAP)
+export default async (): Promise<Event[]> => getSeriesEvents(Series.FE, SESSION_TYPE_MAP, groupQualifying)

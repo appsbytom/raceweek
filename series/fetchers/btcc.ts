@@ -11,4 +11,4 @@ const SESSION_TYPE_MAP = {
   Race: Type.Race
 }
 
-export default async (): Promise<Event[]> => getSeriesEvents(Series.BTCC, sessions => sessions, SESSION_TYPE_MAP)
+export default async (): Promise<Event[]> => getSeriesEvents(Series.BTCC, SESSION_TYPE_MAP)
