@@ -31,7 +31,8 @@ const sessionMap = {
   p2: Type.Practice,
   p3: Type.Practice,
   q: Type.Qualifying,
-  s: Type.Qualifying,
+  ss: Type.Qualifying,
+  s: Type.Race,
   r: Type.Race
 }
 
