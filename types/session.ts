@@ -10,7 +10,8 @@ type Session = {
 export enum Type {
   Practice = 'p',
   Qualifying = 'q',
-  Race = 'r'
+  Race = 'r',
+  NOT_CONFIGURED = 'not_configured'
 }
 
 export type FollowedSessions = string[]

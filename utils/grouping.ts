@@ -1,5 +1,6 @@
 import { FollowedSessionsPreferences } from '@/components/PreferencesContext/types'
 import Event from '@/types/event'
+import { Type } from '@/types/session'
 import Week, { GroupedSession } from '@/types/week'
 import dayjs from 'dayjs'
 
@@ -24,16 +25,21 @@ const getDay = (weeks: Weeks, date: dayjs.Dayjs) => {
 export const getWeeks = (sessions: GroupedSession[], provisionalEvents: Event[], followedSessions: FollowedSessionsPreferences, timezone: string): Week[] => {
   const weeks: Weeks = new Map()
 
-  for (const session of sessions.filter(session => followedSessions[session.series].includes(session.type) && dayjs(session.endTime).isSameOrAfter(dayjs()))) {
-    const { sessions } = getDay(weeks, dayjs(session.startTime).tz(timezone))
+  for (const session of sessions) {
+    const followedSeries = followedSessions[session.series]
+    if ((followedSeries.includes(session.type) || followedSeries.length > 0 && session.type === Type.NOT_CONFIGURED) && dayjs(session.endTime).isSameOrAfter(dayjs())) {
+      const { sessions } = getDay(weeks, dayjs(session.startTime).tz(timezone))
 
-    sessions.push(session)
+      sessions.push(session)
+    }
   }
 
-  for (const event of provisionalEvents.filter(event => followedSessions[event.series].length > 0)) {
-    const { provisionalEvents } = getDay(weeks, dayjs(event.raceDate).utc())
+  for (const event of provisionalEvents) {
+    if (followedSessions[event.series].length > 0) {
+      const { provisionalEvents } = getDay(weeks, dayjs(event.raceDate).utc())
 
-    provisionalEvents.push(event)
+      provisionalEvents.push(event)
+    }
   }
 
   return Array.from(weeks, ([key, days]) => {

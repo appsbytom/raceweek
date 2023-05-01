@@ -4,6 +4,7 @@ import SkeletonWeekList from '@/components/SkeletonWeekList'
 import WeekList from '@/components/WeekList'
 import { getAllEvents } from '@/series/fetcher-config'
 import Event from '@/types/event'
+import { Type } from '@/types/session'
 import { GroupedSession } from '@/types/week'
 import { getWeeks } from '@/utils/grouping'
 import partition from '@/utils/partition'
@@ -26,7 +27,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
   const sessions = confirmedEvents
     .filter(event => dayjs(event.sessions[event.sessions.length - 1].endTime).isSameOrAfter(dayjs()))
-    .flatMap(event => event.sessions.map(session => ({ ...session, series: event.series, eventName: event.name })))
+    .flatMap(event => event.sessions.map(session => ({ ...session, type: session.type || Type.NOT_CONFIGURED, series: event.series, eventName: event.name })))
     .sort((a, b) => Number(new Date(a.startTime)) - Number(new Date(b.startTime)))
 
   return {
