@@ -52,10 +52,8 @@ const Home = ({ sessions, provisionalEvents, skeletonActivityCounts }: Props) =>
   if (!isFollowingSessions) {
     return (
       <Message title="No series' followed" description="Get started by selecting the series’ you are interested in and setup your account">
-        <Link href="/preferences">
-          <a className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md font-medium mt-3 hover:bg-gray-50 sm:w-auto">
-            Set your preferences
-          </a>
+        <Link href="/preferences" className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md font-medium mt-3 hover:bg-gray-50 sm:w-auto">
+          Set your preferences
         </Link>
       </Message>
     )
