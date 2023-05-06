@@ -3,15 +3,10 @@ import { Series } from '@/series/config'
 import dayjs from 'dayjs'
 
 export const FOLLOWED_SESSIONS_KEY = 'followedSessions'
-export const DEFAULT_FOLLOWED_SESSIONS: FollowedSessionsPreferences = {
-  [Series.F1]: [],
-  [Series.F2]: [],
-  [Series.F3]: [],
-  [Series.FE]: [],
-  [Series.WSeries]: [],
-  [Series.BTCC]: [],
-  [Series.ExtremeE]: [],
-}
+export const DEFAULT_FOLLOWED_SESSIONS: FollowedSessionsPreferences = Object.values(Series).reduce((acc, value) => {
+  acc[value] = []
+  return acc
+}, {}) as FollowedSessionsPreferences
 export const TIMEZONE_KEY = 'timezone'
 export const USE_24_HOUR_FORMAT_KEY = 'use24HourFormat'
 
