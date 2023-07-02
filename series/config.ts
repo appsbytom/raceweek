@@ -3,7 +3,6 @@ export enum Series {
   F2 = 'f2',
   F3 = 'f3',
   FE = 'fe',
-  WSeries = 'wseries',
   BTCC = 'btcc',
   ExtremeE = 'extreme-e'
 }
@@ -33,10 +32,6 @@ const SERIES_CONFIG: SeriesMap<SeriesInfo> = {
   [Series.FE]: {
     name: 'FE',
     colours: 'bg-[#14B7ED]'
-  },
-  [Series.WSeries]: {
-    name: 'W Series',
-    colours: 'bg-[#440099]'
   },
   [Series.BTCC]: {
     name: 'BTCC',

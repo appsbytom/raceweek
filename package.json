@@ -7,7 +7,7 @@
     "build": "next build",
     "export": "next export",
     "start": "next start",
-    "scrape-events": "ts-node scripts/scrape-wseries.ts"
+    "update-data": "ts-node scripts/update-data.ts"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.5",
