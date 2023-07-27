@@ -1,14 +1,14 @@
 const SkeletonWeekList = ({ activityCounts }: { activityCounts: number[] }) => (
-  <ul className="animate-pulse flex flex-col gap-4">
+  <ul className="animate-pulse flex flex-col gap-3">
     {activityCounts.map((numOfActivities, i) => (
       <li key={`skeleton-${i}`} className="flex-1">
-        <div className="h-3 mb-1 rounded-full bg-gray-300" />
-        <div className="border border-gray-200">
+        <div className="h-9 mb-1 bg-gray-300" />
+        <div className="divide-y">
           {Array.from({ length: numOfActivities }).map((_, i) => (
-            <div key={`skeleton-activity-${i}`} className="border-b last:border-b-0 flex">
-              <div className="w-3 rounded-none bg-gray-200" />
-              <div className="py-2 px-4 flex-1">
-                <div className="h-6 rounded-full bg-gray-200" />
+            <div key={`skeleton-activity-${i}`} className="flex">
+              <div className="py-2 px-3 flex-1 flex gap-3">
+                <div className="w-9 h-9 rounded-none bg-gray-200" />
+                <div className="flex-1 rounded-full bg-gray-200" />
               </div>
             </div>
           ))}

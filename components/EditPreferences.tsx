@@ -61,7 +61,7 @@ const EditPreferences = () => {
                 <AccordionChevronTrigger className="w-full">
                   <h2 className="text-black">{seriesName}</h2>
                 </AccordionChevronTrigger>
-                <Accordion.Content className="flex items-center space-x-4 mt-1">
+                <Accordion.Content className="flex items-center space-x-4 mt-1 px-3">
                   {sessions.map(({ value: sessionValue, name: sessionName }) => {
                     const id = `${seriesValue}-${sessionValue}`
                     return (
@@ -82,7 +82,7 @@ const EditPreferences = () => {
             )
           })}
         </Accordion.Root>
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 px-3 sm:grid-cols-2">
           <div>
             <label htmlFor="timezoneSelect" className="block mb-2">Timezone</label>
             <TimezoneSelect
@@ -111,7 +111,7 @@ const EditPreferences = () => {
           </div>
         </div>
       </div>
-      <div className="flex sm:justify-end">
+      <div className="flex px-3 sm:justify-end">
         <button
           className="flex items-center justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 font-medium text-white sm:w-auto hover:enabled:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-75"
           onClick={save}

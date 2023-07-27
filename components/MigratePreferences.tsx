@@ -82,7 +82,7 @@ const MigratePreferences = () => {
   }
 
   return (
-    <>
+    <div className="px-3">
       <MigratePreferencesModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="rounded-md border border-red-800 p-4 mt-5 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
         <div>
@@ -106,7 +106,7 @@ const MigratePreferences = () => {
           </button>
         )}
       </div>
-    </>
+    </div>
   )
 }
 

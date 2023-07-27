@@ -7,16 +7,19 @@ type Props = {
   session: GroupedSession
 }
 
-const SessionActivity = ({ session }: Props) => {
+const SessionActivity = ({ session: { series, eventName, startTime, name, unconfirmed } }: Props) => {
   const { timezone, use24HourFormat } = usePreferences()
 
+  const date = dayjs(startTime).tz(timezone)
+
   return (
-    <Activity series={session.series}>
-      <h2>{session.eventName}: {session.name}</h2>
-      <small>
-        {dayjs(session.startTime).tz(timezone).format(use24HourFormat ? 'HH:mm' : 'h:mm A')} {session.unconfirmed && <span className="font-semibold">(TBC)</span>}
-      </small>
-    </Activity>
+    <Activity
+      date={date.format(use24HourFormat ? 'HH:mm' : 'h:mm')}
+      dateUnits={!use24HourFormat && date.format('A')}
+      name={`${unconfirmed ? '(TBC)' : ''} ${name}`}
+      series={series}
+      eventName={eventName}
+    />
   )
 }
 

@@ -51,18 +51,24 @@ const Home = ({ sessions, provisionalEvents, skeletonActivityCounts }: Props) =>
 
   if (!isFollowingSessions) {
     return (
-      <Message title="No series' followed" description="Get started by selecting the series’ you are interested in and setup your account">
-        <Link href="/preferences" className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md font-medium mt-3 hover:bg-gray-50 sm:w-auto">
-          Set your preferences
-        </Link>
-      </Message>
+      <div className="px-3">
+        <Message title="No series' followed" description="Get started by selecting the series’ you are interested in and setup your account">
+          <Link href="/preferences" className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md font-medium mt-3 hover:bg-gray-50 sm:w-auto">
+            Set your preferences
+          </Link>
+        </Message>
+      </div>
     )
   }
 
   const weeks = getWeeks(sessions, provisionalEvents, followedSessions, timezone)
 
   if (weeks.length <= 0) {
-    return <Message title="Season finished" description="All the series' you follow have finished, check back next year" />
+    return (
+      <div className="px-3">
+        <Message title="Season finished" description="All the series' you follow have finished, check back next year" />
+      </div>
+    )
   }
 
   return <WeekList weeks={weeks} />
