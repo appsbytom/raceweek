@@ -1,17 +1,15 @@
 import { getSeriesEvents } from '@/lib/motorsportstats/motorsportstats'
+import { GetSessionType } from '@/lib/motorsportstats/types'
 import { Series } from '@/series/config'
 import { Type } from '@/types/session'
 
-const SESSION_TYPE_MAP = {
-  FP1: Type.Practice,
-  FP2: Type.Practice,
-  QH1: Type.Qualifying,
-  QH2: Type.Qualifying,
-  RR: Type.Race,
-  Race: Type.Race
+const getSessionType: GetSessionType = (sessionCode) => {
+  if (/^FP\d*$/.test(sessionCode)) return Type.Practice
+  if (/^QH\d*$/.test(sessionCode)) return Type.Qualifying
+  if (sessionCode === 'Race' || sessionCode === 'RR') return Type.Race
 }
 
-export default () => getSeriesEvents(Series.ExtremeE, SESSION_TYPE_MAP, sessions => sessions, (event) => {
+export default () => getSeriesEvents(Series.ExtremeE, getSessionType, sessions => sessions, (event) => {
   const sessions = event.sessions.filter(session => session.name !== 'Race')
   if (sessions.filter(session => session.shortCode === 'Race').length > 1) {
     const firstRaceIndex = sessions.findIndex(session => session.shortCode === 'Race') + 1

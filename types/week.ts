@@ -1,6 +1,6 @@
 import { Series } from '@/series/config'
 import Event from './event'
-import Session from './session'
+import Session, { Type } from './session'
 
 type Week = {
   date: string
@@ -16,6 +16,7 @@ type Day = {
 
 export type GroupedSession = Session & {
   series: Series
+  type: Type
   eventName: string
 }
 

@@ -1,7 +1,7 @@
 type Session = {
   id: number | string
   name: string
-  type: Type
+  type?: Type
   unconfirmed: boolean
   startTime: string
   endTime: string

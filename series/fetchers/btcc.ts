@@ -1,14 +1,13 @@
 import { getSeriesEvents } from '@/lib/motorsportstats/motorsportstats'
+import { GetSessionType } from '@/lib/motorsportstats/types'
 import { Series } from '@/series/config'
 import Event from '@/types/event'
 import { Type } from '@/types/session'
 
-const SESSION_TYPE_MAP = {
-  P1: Type.Practice,
-  P2: Type.Practice,
-  Q1: Type.Qualifying,
-  Q2: Type.Qualifying,
-  Race: Type.Race
+const getSessionType: GetSessionType = (sessionCode) => {
+  if (/^P\d*$/.test(sessionCode)) return Type.Practice
+  if (/^Q\d*$/.test(sessionCode)) return Type.Qualifying
+  if (sessionCode === 'Race') return Type.Race
 }
 
-export default async (): Promise<Event[]> => getSeriesEvents(Series.BTCC, SESSION_TYPE_MAP)
+export default async (): Promise<Event[]> => getSeriesEvents(Series.BTCC, getSessionType)

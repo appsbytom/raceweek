@@ -27,6 +27,6 @@ export type Season = {
   status: string
 }
 
-export type SessionMap = { [key: string]: Type }
+export type GetSessionType = (sessionCode: string) => Type | undefined
 
 export type ProcessSessions = (sessions: SessionResponse[]) => SessionResponse[]
