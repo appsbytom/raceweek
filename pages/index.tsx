@@ -1,6 +1,7 @@
 import Message from '@/components/Message'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
 import SkeletonWeekList from '@/components/SkeletonWeekList'
+import UpNext from '@/components/UpNext'
 import WeekList from '@/components/WeekList'
 import { getAllEvents } from '@/series/fetcher-config'
 import Event from '@/types/event'
@@ -71,7 +72,12 @@ const Home = ({ sessions, provisionalEvents, skeletonActivityCounts }: Props) =>
     )
   }
 
-  return <WeekList weeks={weeks} />
+  return (
+    <>
+      <UpNext week={weeks[0]} />
+      <WeekList weeks={weeks.slice(1)} />
+    </>
+  )
 }
 
 export default Home
