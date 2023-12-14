@@ -47,6 +47,8 @@ const toEvent = (event: EventResponse, series: MotorsportStatsSeries, getSession
 
 export const getSeriesEvents = async (series: MotorsportStatsSeries, getSessionType: GetSessionType, processSessions: ProcessSessions = sessions => sessions, processEvent: (event: EventResponse) => EventResponse | EventResponse[] = event => event): Promise<Event[]> => {
   const season = await getCurrentSeason(series)
+  if (!season) return []
+
   const { data } = await CLIENT.get<CalendarResponse>(`/seasons/${season.uuid}/calendar`)
 
   return data.events.reduce<Event[]>((acc, event) => {
