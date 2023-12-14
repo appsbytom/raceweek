@@ -9,6 +9,7 @@ import utc from 'dayjs/plugin/utc'
 import { SessionProvider } from 'next-auth/react'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import 'tailwindcss/tailwind.css'
 
@@ -28,10 +29,11 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
         <Nav />
         <div className="max-w-2xl w-full mx-auto py-3">
           <Component {...pageProps} />
-          <Analytics />
         </div>
       </PreferencesProvider>
     </SessionProvider>
+    <Analytics />
+    <SpeedInsights />
   </>
 )
 
