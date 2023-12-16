@@ -1,13 +1,13 @@
+import { createClient } from '@/lib/formula1/formula1'
 import { Series } from '@/series/config'
 import Event from '@/types/event'
 import Session, { Type } from '@/types/session'
-import axios from 'axios'
 import { EventsResponse, SessionsResponse } from './types'
 
-const f1Client = axios.create({ baseURL: 'https://api.formula1.com/v1', headers: { apikey: process.env.F1_KEY }})
+const client = createClient(Series.F1)
 
 const getEvents = async (): Promise<Event[]> => {
-  const { data } = await f1Client.get<EventsResponse>('/editorial-eventlisting/events')
+  const { data } = await client.get<EventsResponse>('/editorial-eventlisting/events')
 
   return Promise.all(data.events
     .filter(race => race.type === 'race')
@@ -37,7 +37,7 @@ const sessionMap = {
 }
 
 const getSessions = async (id): Promise<Session[]> => {
-  const { data } = await f1Client.get<SessionsResponse>('/fom-results/timetables', { params: { meeting: id }})
+  const { data } = await client.get<SessionsResponse>('/fom-results/timetables', { params: { meeting: id }})
 
   if (data.timetables.some(session => session.startTime === 'TBC' || session.endTime === 'TBC')) return []
 

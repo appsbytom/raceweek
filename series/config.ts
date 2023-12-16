@@ -5,16 +5,8 @@ export enum Series {
   FE = 'fe',
   BTCC = 'btcc',
   ExtremeE = 'extreme-e',
-  IndyCar = 'indycar'
-}
-
-export type MotorsportStatsSeries = Series.FE | Series.BTCC | Series.ExtremeE | Series.IndyCar
-
-export type SeriesMap<T> = { [key in Series]: T }
-
-type SeriesInfo = {
-  name: string
-  colours: string
+  IndyCar = 'indycar',
+  F1Academy = 'f1-academy'
 }
 
 const SERIES_CONFIG: SeriesMap<SeriesInfo> = {
@@ -45,7 +37,18 @@ const SERIES_CONFIG: SeriesMap<SeriesInfo> = {
   [Series.IndyCar]: {
     name: 'IndyCar',
     colours: 'bg-[#0075C9]'
+  },
+  [Series.F1Academy]: {
+    name: 'F1 Academy',
+    colours: 'bg-gradient-to-r from-[#09f4f9] to-[#be117e]'
   }
+}
+
+export type SeriesMap<T> = { [key in Series]: T }
+
+type SeriesInfo = {
+  name: string
+  colours: string
 }
 
 export default SERIES_CONFIG
