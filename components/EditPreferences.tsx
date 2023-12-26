@@ -88,7 +88,7 @@ const EditPreferences = () => {
             <TimezoneSelect
               inputId="timezoneSelect"
               value={timezone}
-              onChange={selectedTimezone => setTimezone(selectedTimezone.value)}
+              onChange={selectedTimezone => setTimezone(typeof selectedTimezone === 'string' ? selectedTimezone : selectedTimezone.value)}
               styles={{
                 menuList: (provided) => ({ ...provided, paddingTop: 0, paddingBottom: 0 })
               }}
