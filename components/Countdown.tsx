@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 
 dayjs.extend(duration)
 
+const MILLISECONDS_IN_DAY = 8.64e+7
+
 type Props = {
   startTime: string
   series: Series
@@ -36,7 +38,7 @@ const Countdown = ({ startTime, series }: Props) => {
   const duration = dayjs.duration(countdown)
 
   let time
-  if (duration.days() > 0) {
+  if (countdown > MILLISECONDS_IN_DAY) {
     time = <span className="text-lg font-bold">{duration.humanize()}</span>
   } else {
     const hours = duration.hours()
