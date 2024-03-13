@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
@@ -33,7 +32,6 @@ model Session {
   eventId     String   @map("event_id")
 
   @@id([id, eventId])
-  @@index([eventId])
   @@map("sessions")
 }
 
@@ -46,4 +44,14 @@ model Preference {
 
   @@id([id, provider])
   @@map("preferences")
+}
+
+model SessionReminder {
+  id           String @id
+  title        String
+  body         String
+  scheduledFor Int    @map("scheduled_for")
+  topic        String
+
+  @@map("session_reminders")
 }
