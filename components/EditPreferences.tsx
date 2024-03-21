@@ -1,3 +1,4 @@
+import { getFCMToken } from '@/lib/firebase'
 import { Series } from '@/series/config'
 import { Type } from '@/types/session'
 import { ALL_SERIES } from '@/utils/series'
@@ -23,6 +24,12 @@ const EditPreferences = () => {
   const [use24HourFormat, setUse24HourFormat] = useState(savedUse24HourFormat)
   const [expandedSeries, setExpandedSeries] = useState([])
   const [isSaved, setIsSaved] = useState(false)
+  const [permission, setPermission] = useState<'unsupported' | NotificationPermission>(() => {
+    if (!('Notification' in window)) {
+      return 'unsupported'
+    }
+    return Notification.permission
+  })
 
   useEffect(() => {
     setTimezone(savedTimezone)
@@ -34,8 +41,25 @@ const EditPreferences = () => {
     setExpandedSeries(Object.entries(savedFollowedSessions).filter(([_, value]) => value.length > 0).map(([key]) => key))
   }, [savedFollowedSessions])
 
+  const subscribe = async () => {
+    const token = await getFCMToken()
+    await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        token,
+        topics: Object.entries(followedSessions).flatMap(([key, value]) => value.flatMap(v => `${key}-${v}`))
+      })
+    })
+  }
+
   const save = async () => {
     await savePref(followedSessions, timezone, use24HourFormat)
+    if (permission === 'granted') {
+      await subscribe()
+    }
     setIsSaved(true)
 
     setTimeout(() => setIsSaved(false), 1000)
@@ -47,6 +71,14 @@ const EditPreferences = () => {
       setFollowedSessions(prevState => ({ ...prevState, [series]: [...prevState[series], value] }))
     } else {
       setFollowedSessions(prevState => ({ ...prevState, [series]: prevState[series].filter(prevSession => prevSession !== value) }))
+    }
+  }
+
+  const requestPermission = async () => {
+    const permission = await Notification.requestPermission()
+    setPermission(permission)
+    if (permission === 'granted') {
+      await subscribe()
     }
   }
 
@@ -120,6 +152,18 @@ const EditPreferences = () => {
           {isSaving && <Spinner className="w-4 h-4 mr-3 border-gray-200" />}
           {isSaved ? 'Saved!' : 'Save'}
         </button>
+      </div>
+      <div className="px-3">
+        <div className="flex flex-col gap-3 p-4 mt-5 border border-gray-300 rounded-md sm:flex-row sm:justify-between sm:items-center">
+          <div>
+            <h2 className="text-lg font-semibold">Push Notifications</h2>
+            {permission === 'unsupported' && <p>Your browser does not support this feature</p>}
+            {permission === 'denied' && <p>You have denied permissions. Reset your permissions in the browser to choose again</p>}
+            {permission === 'default' && <p>Opt-in to receive a notification reminder <strong>5 minutes</strong> before the sessions you follow start</p>}
+            {permission === 'granted' && <p>You will receive a notification reminder <strong>5 minutes</strong> before the sessions you follow start</p>}
+          </div>
+          {permission === 'default' && <button className="py-2 px-4 rounded-md border border-gray-300 font-medium" onClick={requestPermission}>Allow Notifications</button>}
+        </div>
       </div>
     </>
   )
