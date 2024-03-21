@@ -1,9 +1,19 @@
+import { messaging } from '@/lib/firebase-admin'
 import prisma from '@/lib/prisma'
-import { NextApiRequest, NextApiResponse } from "next"
 import dayjs from 'dayjs'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.json(await prisma.sessionReminder.findMany({ select: { id: true }, where: { scheduledFor: { lte: dayjs().unix() }}}))
+  const reminders = await prisma.sessionReminder.findMany({ where: { scheduledFor: { lte: dayjs().unix() }}})
+
+  if (reminders.length === 0) {
+    return res.json({ success: true, message: 'No reminders to send' })
+  }
+  await messaging.sendEach(reminders.map(reminder => ({
+    notification: { title: reminder.title, body: reminder.body },
+    topic: reminder.topic
+  })))
+  res.json({ success: true })
 }
 
 export default handler

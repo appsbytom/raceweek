@@ -1,14 +1,35 @@
 import prisma from '@/lib/prisma'
+import SERIES_CONFIG from '@/series/config'
+import { getAllEvents } from '@/series/fetcher-config'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 const CONSOLE_WRAPPER = '---------- UPDATE DATA ----------'
-const DUMMY = 'dummy'
 
 const main = async () => {
   console.log(CONSOLE_WRAPPER)
-  await prisma.event.create({ data: { id: DUMMY, name: DUMMY, series: DUMMY, raceDate: '1970-01-01T00:00:00.000Z' }})
 
-  await prisma.event.delete({ where: { id: DUMMY }})
+  await prisma.$transaction((await getAllEvents()).filter(event => !event.provisional).flatMap(event => event.sessions.filter(session => !session.unconfirmed && dayjs(session.startTime).isAfter(dayjs())).map(session => {
+    const id = `${event.series}-${session.id}`
+    const title = `${session.name} starts in 5 minutes`
+    const body = `${SERIES_CONFIG[event.series].name}: ${event.name}`
+    const scheduledFor = dayjs(session.startTime).subtract(5, 'minutes').unix()
+    return prisma.sessionReminder.upsert({
+      where: { id },
+      create: {
+        id,
+        title,
+        body,
+        scheduledFor,
+        topic: `${event.series}-${session.type}`
+      },
+      update: {
+        title,
+        body,
+        scheduledFor
+      }
+    })
+  })))
 
   try {
     await axios.get(`${process.env.APP_URL}/api/revalidate`, { headers: { token: process.env.TOKEN }})

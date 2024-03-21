@@ -55,3 +55,11 @@ model SessionReminder {
 
   @@map("session_reminders")
 }
+
+model DeviceToken {
+  id        String   @id
+  topics    String[]
+  timestamp Int
+
+  @@map("device_tokens")
+}
