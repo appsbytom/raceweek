@@ -9,10 +9,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (reminders.length === 0) {
     return res.json({ success: true, message: 'No reminders to send' })
   }
-  await messaging.sendEach(reminders.map(reminder => ({
-    notification: { title: reminder.title, body: reminder.body },
-    topic: reminder.topic
-  })))
+  await Promise.all([
+    messaging.sendEach(reminders.map(reminder => ({
+      notification: { title: reminder.title, body: reminder.body },
+      topic: reminder.topic
+    }))),
+    prisma.sessionReminder.deleteMany({ where: { id: { in: reminders.map(reminder => reminder.id )}}})
+  ])
   res.json({ success: true })
 }
 

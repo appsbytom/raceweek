@@ -12,11 +12,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).end()
   }
   const [subscribe, unsubscribe] = partition(TOPICS, item => req.body.topics.includes(item))
+  const timestamp = dayjs().unix()
   await Promise.all([
     prisma.deviceToken.upsert({
       where: { id: req.body.token },
-      create: { id: req.body.token, topics: subscribe, timestamp: dayjs().unix() },
-      update: { topics: subscribe, timestamp: dayjs().unix() }
+      create: { id: req.body.token, topics: subscribe, timestamp },
+      update: { topics: subscribe, timestamp }
     }),
     ...subscribe.map(topic => messaging.subscribeToTopic(req.body.token, topic)),
     ...unsubscribe.map(topic => messaging.unsubscribeFromTopic(req.body.token, topic))
