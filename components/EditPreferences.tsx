@@ -41,20 +41,24 @@ const EditPreferences = () => {
     setExpandedSeries(Object.entries(savedFollowedSessions).filter(([_, value]) => value.length > 0).map(([key]) => key))
   }, [savedFollowedSessions])
 
+  const subscribe = async () => {
+    const token = await getFCMToken()
+    await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        token,
+        topics: Object.entries(followedSessions).flatMap(([key, value]) => value.flatMap(v => `${key}-${v}`))
+      })
+    })
+  }
+
   const save = async () => {
     await savePref(followedSessions, timezone, use24HourFormat)
     if (permission === 'granted') {
-      const token = await getFCMToken()
-      await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          token,
-          topics: Object.entries(followedSessions).flatMap(([key, value]) => value.flatMap(v => `${key}-${v}`))
-        })
-      })
+      await subscribe()
     }
     setIsSaved(true)
 
@@ -74,35 +78,13 @@ const EditPreferences = () => {
     const permission = await Notification.requestPermission()
     setPermission(permission)
     if (permission === 'granted') {
-      const token = await getFCMToken()
-      await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          token,
-          topics: Object.entries(savedFollowedSessions).flatMap(([key, value]) => value.flatMap(v => `${key}-${v}`))
-        })
-      })
+      await subscribe()
     }
   }
 
   return (
     <>
       <div className="mb-4">
-        <div className="px-3">
-          <div className="flex flex-col gap-3 p-4 border border-gray-300 rounded-md sm:flex-row sm:justify-between sm:items-center">
-            <div>
-              <h2 className="text-lg font-semibold">Push Notifications</h2>
-              {permission === 'unsupported' && <p>Your browser does not support this feature</p>}
-              {permission === 'denied' && <p>You have denied permissions. Reset your permissions in the browser to choose again</p>}
-              {permission === 'default' && <p>Opt-in to receive a notification reminder 5 minutes before the sessions you follow start</p>}
-              {permission === 'granted' && <p>You will receive a notification reminder 5 minutes before</p>}
-            </div>
-            {permission === 'default' && <button className="py-2 px-4 rounded-md border border-gray-300 font-medium" onClick={requestPermission}>Allow Notifications</button>}
-          </div>
-        </div>
         <Accordion.Root className="grid gap-2 mb-3 sm:grid-cols-2" type="multiple" value={expandedSeries} onValueChange={setExpandedSeries}>
           {ALL_SERIES.map(({ value: seriesValue, name: seriesName }) => {
             const seriesFollowedSessions = followedSessions[seriesValue]
@@ -170,6 +152,18 @@ const EditPreferences = () => {
           {isSaving && <Spinner className="w-4 h-4 mr-3 border-gray-200" />}
           {isSaved ? 'Saved!' : 'Save'}
         </button>
+      </div>
+      <div className="px-3">
+        <div className="flex flex-col gap-3 p-4 mt-5 border border-gray-300 rounded-md sm:flex-row sm:justify-between sm:items-center">
+          <div>
+            <h2 className="text-lg font-semibold">Push Notifications</h2>
+            {permission === 'unsupported' && <p>Your browser does not support this feature</p>}
+            {permission === 'denied' && <p>You have denied permissions. Reset your permissions in the browser to choose again</p>}
+            {permission === 'default' && <p>Opt-in to receive a notification reminder <strong>5 minutes</strong> before the sessions you follow start</p>}
+            {permission === 'granted' && <p>You will receive a notification reminder <strong>5 minutes</strong> before the sessions you follow start</p>}
+          </div>
+          {permission === 'default' && <button className="py-2 px-4 rounded-md border border-gray-300 font-medium" onClick={requestPermission}>Allow Notifications</button>}
+        </div>
       </div>
     </>
   )
