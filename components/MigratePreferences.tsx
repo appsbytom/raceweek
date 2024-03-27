@@ -82,12 +82,12 @@ const MigratePreferences = () => {
   }
 
   return (
-    <div className="px-3">
+    <>
       <MigratePreferencesModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="rounded-md border border-red-800 p-4 mt-5 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
         <div>
-          <h2 className="text-lg font-semibold">Migrate your preferences</h2>
-          <p className="text-gray-700">{getMessage()}</p>
+          <h3 className="text-lg font-semibold">Migrate your preferences</h3>
+          <p className="text-gray-700 text-sm">{getMessage()}</p>
         </div>
         {data ? (
           <button
@@ -101,12 +101,12 @@ const MigratePreferences = () => {
             className="flex items-center justify-center shrink-0 w-full rounded-md border border-transparent shadow-sm px-4 py-2 font-medium text-white bg-[#4285F4] hover:bg-[#4285F4]/90 sm:w-auto"
             onClick={() => signIn('google')}
           >
-            <svg className="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+            <svg className="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" /></svg>
             Login with Google
           </button>
         )}
       </div>
-    </div>
+    </>
   )
 }
 

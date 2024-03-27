@@ -1,13 +1,13 @@
 import { getFCMToken } from '@/lib/firebase'
-import { Series } from '@/series/config'
+import SERIES_CONFIG, { Series } from '@/series/config'
 import { Type } from '@/types/session'
 import { ALL_SERIES } from '@/utils/series'
 import { Switch } from '@headlessui/react'
-import * as Accordion from '@radix-ui/react-accordion'
+import { BellIcon, BellSlashIcon } from '@heroicons/react/24/outline'
+import { BellAlertIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 import { ChangeEvent, useEffect, useState } from 'react'
 import TimezoneSelect from 'react-timezone-select'
-import AccordionChevronTrigger from './AccordionChevronTrigger'
 import { usePreferences } from './PreferencesContext/PreferencesContext'
 import Spinner from './Spinner'
 
@@ -17,14 +17,29 @@ const sessions = [
   { value: Type.Race, name: 'Race' }
 ]
 
+type NotificationStatus = 'unsupported' | NotificationPermission
+
+const NotificationBell = ({ permission, requestPermission }: { permission: NotificationStatus, requestPermission: () => void }) => {
+  if (permission === 'granted') {
+    return <BellAlertIcon className="size-5" />
+  }
+
+  if (permission === 'default') {
+    return <button onClick={requestPermission} className="border border-gray-300 rounded-full p-0.5 hover:bg-gray-50">
+      <BellIcon className="size-5" />
+    </button>
+  }
+
+  return <BellSlashIcon className="size-5" />
+}
+
 const EditPreferences = () => {
   const { followedSessions: savedFollowedSessions, timezone: savedTimezone, use24HourFormat: savedUse24HourFormat, save: savePref, isSaving } = usePreferences()
   const [followedSessions, setFollowedSessions] = useState(savedFollowedSessions)
   const [timezone, setTimezone] = useState(savedTimezone)
   const [use24HourFormat, setUse24HourFormat] = useState(savedUse24HourFormat)
-  const [expandedSeries, setExpandedSeries] = useState([])
   const [isSaved, setIsSaved] = useState(false)
-  const [permission, setPermission] = useState<'unsupported' | NotificationPermission>(() => {
+  const [permission, setPermission] = useState<NotificationStatus>(() => {
     if (!('Notification' in window)) {
       return 'unsupported'
     }
@@ -38,7 +53,6 @@ const EditPreferences = () => {
 
   useEffect(() => {
     setFollowedSessions(savedFollowedSessions)
-    setExpandedSeries(Object.entries(savedFollowedSessions).filter(([_, value]) => value.length > 0).map(([key]) => key))
   }, [savedFollowedSessions])
 
   const subscribe = async () => {
@@ -85,38 +99,50 @@ const EditPreferences = () => {
   return (
     <>
       <div className="mb-4">
-        <Accordion.Root className="grid gap-2 mb-3 sm:grid-cols-2" type="multiple" value={expandedSeries} onValueChange={setExpandedSeries}>
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl">Followed series'</h2>
+          <NotificationBell permission={permission} requestPermission={requestPermission} />
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          {permission === 'unsupported' && <p>Your browser does not support notifications</p>}
+          {permission === 'denied' && <p>You have denied notification permissions. Reset your permissions in the browser to choose again</p>}
+        </div>
+        <hr className="border-gray-200 mt-2" />
+        <div className="grid gap-3 mt-2 sm:grid-cols-2">
           {ALL_SERIES.map(({ value: seriesValue, name: seriesName }) => {
             const seriesFollowedSessions = followedSessions[seriesValue]
             return (
-              <Accordion.Item key={seriesValue} value={seriesValue}>
-                <AccordionChevronTrigger className="w-full">
-                  <h2 className="text-black">{seriesName}</h2>
-                </AccordionChevronTrigger>
-                <Accordion.Content className="flex items-center space-x-4 mt-1 px-3">
+              <div key={seriesValue}>
+                <div className="flex items-center gap-2">
+                  <div className={`${SERIES_CONFIG[seriesValue].colours} h-3 w-3 rounded-full`} />
+                  <h2 className="font-semibold">{seriesName}</h2>
+                </div>
+                <div className="flex divide-x mt-1">
                   {sessions.map(({ value: sessionValue, name: sessionName }) => {
                     const id = `${seriesValue}-${sessionValue}`
                     return (
-                      <div key={id} className="flex items-center space-x-2">
+                      <div key={id} className="flex items-center space-x-2 justify-center grow px-2 py-1">
                         <input
                           id={id}
                           type="checkbox"
+                          className="form-checkbox rounded border-gray-300"
                           value={sessionValue}
                           checked={seriesFollowedSessions.includes(sessionValue)}
                           onChange={event => onChange(event, seriesValue)}
                         />
-                        <label htmlFor={id}>{sessionName}</label>
+                        <label htmlFor={id} className="text-sm font-semibold">{sessionName}</label>
                       </div>
                     )
                   })}
-                </Accordion.Content>
-              </Accordion.Item>
+                </div>
+              </div>
             )
           })}
-        </Accordion.Root>
-        <div className="grid gap-3 px-3 sm:grid-cols-2">
+        </div>
+        <h2 className="text-2xl border-b border-gray-200 pb-2 mt-4">Account</h2>
+        <div className="grid gap-3 mt-2 sm:grid-cols-2">
           <div>
-            <label htmlFor="timezoneSelect" className="block mb-2">Timezone</label>
+            <label htmlFor="timezoneSelect" className="block mb-1 font-semibold">Timezone</label>
             <TimezoneSelect
               inputId="timezoneSelect"
               value={timezone}
@@ -128,7 +154,7 @@ const EditPreferences = () => {
           </div>
           <div>
             <Switch.Group as="div" className="flex justify-between">
-              <Switch.Label>Use 24-hour format</Switch.Label>
+              <Switch.Label className="font-semibold">Use 24-hour format</Switch.Label>
               <Switch
                 className={classNames(`${use24HourFormat ? 'bg-blue-600' : 'bg-gray-200'} inline-flex w-11 p-0.5 rounded-full transition-colors ease-in-out duration-200`)}
                 checked={use24HourFormat}
@@ -143,7 +169,7 @@ const EditPreferences = () => {
           </div>
         </div>
       </div>
-      <div className="flex px-3 sm:justify-end">
+      <div className="flex sm:justify-end">
         <button
           className="flex items-center justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 font-medium text-white sm:w-auto hover:enabled:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-75"
           onClick={save}
@@ -152,18 +178,6 @@ const EditPreferences = () => {
           {isSaving && <Spinner className="w-4 h-4 mr-3 border-gray-200" />}
           {isSaved ? 'Saved!' : 'Save'}
         </button>
-      </div>
-      <div className="px-3">
-        <div className="flex flex-col gap-3 p-4 mt-5 border border-gray-300 rounded-md sm:flex-row sm:justify-between sm:items-center">
-          <div>
-            <h2 className="text-lg font-semibold">Push Notifications</h2>
-            {permission === 'unsupported' && <p>Your browser does not support this feature</p>}
-            {permission === 'denied' && <p>You have denied permissions. Reset your permissions in the browser to choose again</p>}
-            {permission === 'default' && <p>Opt-in to receive a notification reminder <strong>5 minutes</strong> before the sessions you follow start</p>}
-            {permission === 'granted' && <p>You will receive a notification reminder <strong>5 minutes</strong> before the sessions you follow start</p>}
-          </div>
-          {permission === 'default' && <button className="py-2 px-4 rounded-md border border-gray-300 font-medium" onClick={requestPermission}>Allow Notifications</button>}
-        </div>
       </div>
     </>
   )

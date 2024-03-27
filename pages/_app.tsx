@@ -11,7 +11,7 @@ import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-import 'tailwindcss/tailwind.css'
+import '../styles.css'
 
 dayjs.extend(isoWeek)
 dayjs.extend(isSameOrAfter)

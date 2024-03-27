@@ -1,6 +1,6 @@
-import AccordionChevronTrigger from '@/components/AccordionChevronTrigger'
 import Week from '@/types/week'
 import { getSeriesNames } from '@/utils/series'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import * as Accordion from '@radix-ui/react-accordion'
 import dayjs from 'dayjs'
 import ActivityList from './ActivityList'
@@ -19,7 +19,7 @@ const WeekList = ({ weeks }: Props) => {
     <Accordion.Root type="multiple" asChild>
       <ol>
         {weeks.map(({ date, days }) => {
-          const { 0: { date: firstDayDate }, [days.length - 1]: { date: lastDayDate }} = days
+          const { 0: { date: firstDayDate }, [days.length - 1]: { date: lastDayDate } } = days
           const firstDay = dayjs(firstDayDate).tz(timezone)
           const lastDay = dayjs(lastDayDate).tz(timezone)
 
@@ -28,12 +28,15 @@ const WeekList = ({ weeks }: Props) => {
           return (
             <Accordion.Item key={date} value={date} asChild>
               <li>
-                <AccordionChevronTrigger>
-                  <h1 className="text-lg">
-                    {days.length > 1 ? `${firstDay.month() === lastDay.month() ? firstDay.format('D') : format(firstDay)} - ${format(lastDay)}` : format(firstDay)}
-                  </h1>
-                  <p className="text-sm font-bold group-radix-state-open:hidden bg-">{getSeriesNames(series => includedSeries.includes(series.value))}</p>
-                </AccordionChevronTrigger>
+                <Accordion.Header asChild>
+                  <Accordion.Trigger className="flex gap-2 items-center group w-full py-2 px-3">
+                    <ChevronDownIcon className="size-5 group-radix-state-open:rotate-180" />
+                    <h1 className="text-lg">
+                      {days.length > 1 ? `${firstDay.month() === lastDay.month() ? firstDay.format('D') : format(firstDay)} - ${format(lastDay)}` : format(firstDay)}
+                    </h1>
+                    <p className="text-sm font-bold group-radix-state-open:hidden bg-">{getSeriesNames(series => includedSeries.includes(series.value))}</p>
+                  </Accordion.Trigger>
+                </Accordion.Header>
                 <Accordion.Content asChild>
                   <ol>
                     {days.map(({ date, sessions, provisionalEvents }) => (

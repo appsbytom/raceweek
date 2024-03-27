@@ -27,7 +27,7 @@ const Countdown = ({ startTime, series }: Props) => {
     return (
       <div className="flex items-center gap-2">
         <h2 className="font-bold text-lg">LIVE</h2>
-        <div className="relative h-2 w-2">
+        <div className="relative size-2">
           <div className={`animate-ping absolute h-full w-full rounded-full ${SERIES_CONFIG[series].colours}`} />
           <div className={`relative rounded-full h-full ${SERIES_CONFIG[series].colours}`} />
         </div>

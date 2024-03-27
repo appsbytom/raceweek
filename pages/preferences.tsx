@@ -23,10 +23,10 @@ const Preferences = () => {
   }
 
   return (
-    <>
+    <div className="px-3 sm:px-0">
       <EditPreferences/>
       <MigratePreferences />
-    </>
+    </div>
   );
 }
 
