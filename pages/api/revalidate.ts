@@ -10,32 +10,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const [_, events] = await Promise.all([res.revalidate('/'), getAllEvents()])
-    await prisma.$transaction(events
-      .filter(event => !event.provisional)
-      .flatMap(event => event.sessions
-        .filter(session => !session.unconfirmed && dayjs(session.startTime).isAfter(dayjs()))
-        .map(session => {
-          const id = `${event.series}-${session.id}`
-          const title = `${SERIES_CONFIG[event.series].name}: ${event.name}`
-          const body = `${session.name} starts in a few minutes`
-          const scheduledFor = dayjs(session.startTime).subtract(5, 'minutes').unix()
-          return prisma.sessionReminder.upsert({
-            where: { id },
-            create: {
+    const [_, events] = await Promise.all([res.revalidate('/'), getAllEvents(), prisma.sessionReminder.deleteMany({})])
+    await prisma.sessionReminder.createMany({
+      data: events
+        .filter(event => !event.provisional)
+        .flatMap(event => event.sessions
+          .filter(session => !session.unconfirmed && dayjs(session.startTime).isAfter(dayjs()))
+          .map(session => {
+            const id = `${event.series}-${session.id}`
+            const title = `${SERIES_CONFIG[event.series].name}: ${event.name}`
+            const body = `${session.name} starts in a few minutes`
+            const scheduledFor = dayjs(session.startTime).subtract(5, 'minutes').unix()
+            return {
               id,
               title,
               body,
               scheduledFor,
               topic: `${event.series}-${session.type}`
-            },
-            update: {
-              title,
-              body,
-              scheduledFor
             }
           })
-        })))
+        )
+    })
     return res.json({ revalidated: true })
   } catch (err) {
     return res.status(500).json({ message: 'server error' })
