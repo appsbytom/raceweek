@@ -31,17 +31,19 @@ const WeekList = ({ weeks }: Props) => {
                 <Accordion.Header asChild>
                   <Accordion.Trigger className="flex gap-2 items-center group w-full py-2 px-3">
                     <ChevronDownIcon className="size-5 group-radix-state-open:rotate-180" />
-                    <h1 className="text-lg">
-                      {days.length > 1 ? `${firstDay.month() === lastDay.month() ? firstDay.format('D') : format(firstDay)} - ${format(lastDay)}` : format(firstDay)}
-                    </h1>
-                    <p className="text-sm font-bold group-radix-state-open:hidden bg-">{getSeriesNames(series => includedSeries.includes(series.value))}</p>
+                    <div className="flex gap-2 items-baseline">
+                      <h1>
+                        {days.length > 1 ? `${firstDay.month() === lastDay.month() ? firstDay.format('D') : format(firstDay)} - ${format(lastDay)}` : format(firstDay)}
+                      </h1>
+                      <p className="text-xs font-semibold group-radix-state-open:hidden">{getSeriesNames(series => includedSeries.includes(series.value))}</p>
+                    </div>
                   </Accordion.Trigger>
                 </Accordion.Header>
                 <Accordion.Content asChild>
                   <ol>
                     {days.map(({ date, sessions, provisionalEvents }) => (
                       <li key={date}>
-                        <h2 className="bg-gray-50 border-b py-2 px-3 font-semibold">{dayjs(date).format('dddd')}</h2>
+                        <h2 className="bg-gray-50 border-b py-2 px-3 text-sm font-semibold">{dayjs(date).format('dddd')}</h2>
                         <ActivityList sessions={sessions} provisionalEvents={provisionalEvents} />
                       </li>
                     ))}

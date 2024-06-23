@@ -20,7 +20,7 @@ const UpNext = ({ week: { days } }: Props) => {
     <ol className="mb-3">
       {days.map(({ date, sessions, provisionalEvents }, index) => (
         <li key={date}>
-          <h1 className="bg-gray-50 border-b py-2 px-3 font-semibold">
+          <h1 className="bg-gray-50 border-b py-2 px-3 text-sm font-semibold">
             {dayjs(date).tz(timezone).calendar(dayjs().tz(timezone), {
               sameDay: '[Today]',
               nextDay: '[Tomorrow]',

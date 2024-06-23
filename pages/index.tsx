@@ -54,7 +54,7 @@ const Home = ({ sessions, provisionalEvents, skeletonActivityCounts }: Props) =>
     return (
       <div className="px-3">
         <Message title="No series' followed" description="Get started by selecting the series’ you are interested in and setup your account">
-          <Link href="/preferences" className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md font-medium mt-3 hover:bg-gray-50 sm:w-auto">
+          <Link href="/preferences" className="inline-block w-full shrink-0 px-4 py-2 border border-gray-300 rounded-md text-sm font-semibold mt-3 hover:bg-gray-50 sm:w-auto">
             Set your preferences
           </Link>
         </Message>
