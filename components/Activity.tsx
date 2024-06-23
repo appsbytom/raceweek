@@ -19,15 +19,15 @@ const Activity = ({ date, dateUnits, series, eventName, name }: Props) => {
       </div>
       <div>
         <h2 className="text-sm font-medium">{name}</h2>
-        <div className="flex items-center gap-2 mt-1 text-gray-500">
+        <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
           <div className="flex items-center gap-2">
             <div className={`${colours} size-2 rounded-full `} />
-            <p className="font-medium text-xs">{seriesName}</p>
+            <p className="font-semibold">{seriesName}</p>
           </div>
           {eventName && (
             <>
               <span>·</span>
-              <p className="text-xs">{eventName}</p>
+              <p>{eventName}</p>
             </>
           )}
         </div>
