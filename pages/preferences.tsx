@@ -1,4 +1,5 @@
-import EditPreferences from '@/components/EditPreferences'
+import TimePlace from '@/components/TimePlace'
+import FollowedSessions from '@/components/FollowedSessions'
 import MigratePreferences from '@/components/MigratePreferences'
 import { usePreferences } from '@/components/PreferencesContext/PreferencesContext'
 import { useSession } from 'next-auth/react'
@@ -23,11 +24,12 @@ const Preferences = () => {
   }
 
   return (
-    <div className="px-3 sm:px-0">
-      <EditPreferences/>
+    <div className="px-3 md:px-0">
+      <FollowedSessions />
+      <TimePlace />
       <MigratePreferences />
     </div>
-  );
+  )
 }
 
 export default Preferences

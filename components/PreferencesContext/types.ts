@@ -1,5 +1,7 @@
-import { SeriesMap } from '@/series/config';
+import { SeriesMap } from '@/series/config'
 import { FollowedSessions } from '@/types/session'
+import { NotificationStatus } from '@/utils/notifications'
+import { Dispatch, SetStateAction } from 'react'
 
 export type FollowedSessionsPreferences = SeriesMap<FollowedSessions>
 
@@ -15,4 +17,6 @@ export type ActionablePreferences = Preferences & {
   isLoading: boolean
   isLinkedToAccount: boolean
   isSaving: boolean
+  notificationPermission: string
+  setNotificationPermission: Dispatch<SetStateAction<NotificationStatus>>
 }

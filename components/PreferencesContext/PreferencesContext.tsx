@@ -1,3 +1,4 @@
+import { NotificationStatus, NOTIFICATION_KEY, subscribe } from '@/utils/notifications'
 import {
   DEFAULT_FOLLOWED_SESSIONS,
   FOLLOWED_SESSIONS_KEY,
@@ -22,6 +23,16 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isLinkedToAccount, setIsLinkedToAccount] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [notificationPermission, setNotificationPermission] = useState<NotificationStatus>(() => {
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      return 'unsupported'
+    }
+    const perm = Notification.permission
+    if (perm === 'granted') {
+      return localStorage.getItem(NOTIFICATION_KEY) ? 'default' : perm
+    }
+    return perm
+  })
 
   const fetchPreferences = async () => {
     const response = await fetch(`/api/preferences/${data.user.id}`)
@@ -61,17 +72,22 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
 
     if (data) {
       setIsSaving(true)
-      await fetch(
-        `/api/preferences/${data.user.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ followedSessions, timezone, use24HourFormat })
-        })
+      await fetch(`/api/preferences/${data.user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ followedSessions, timezone, use24HourFormat })
+      })
+      if (notificationPermission === 'granted') await subscribe(followedSessions)
       setIsLinkedToAccount(true)
       setIsSaving(false)
     } else {
+      if (notificationPermission === 'granted') {
+        setIsSaving(true)
+        await subscribe(followedSessions)
+        setIsSaving(false)
+      }
       localStorage.setItem(FOLLOWED_SESSIONS_KEY, JSON.stringify(followedSessions))
       localStorage.setItem(TIMEZONE_KEY, timezone)
       localStorage.setItem(USE_24_HOUR_FORMAT_KEY, JSON.stringify(use24HourFormat))
@@ -87,6 +103,8 @@ const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     isLinkedToAccount,
     isSaving,
+    notificationPermission,
+    setNotificationPermission
   }
 
   return (
