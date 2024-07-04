@@ -2,7 +2,7 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 const PreferencesLink = () => (
-  <Link href="/preferences" className="hover:underline">
+  <Link href="/preferences" className="text-sm font-semibold text-gray-700 hover:underline">
     Preferences
   </Link>
 )
@@ -21,7 +21,7 @@ const NavProfile = () => {
   return (
     <div className="flex gap-3">
       <PreferencesLink />
-      <button className="hover:underline" onClick={() => signOut()}>Logout</button>
+      <button className="text-sm font-semibold text-gray-700 hover:underline" onClick={() => signOut()}>Logout</button>
     </div>
   )
 }
@@ -29,7 +29,7 @@ const NavProfile = () => {
 const Nav = () => (
   <nav className="px-4 py-3 border-b">
     <div className="flex justify-between items-center max-w-2xl mx-auto">
-      <Link href="/" className="text-xl">
+      <Link href="/">
         raceweek
       </Link>
       <NavProfile />

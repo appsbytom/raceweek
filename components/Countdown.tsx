@@ -26,7 +26,7 @@ const Countdown = ({ startTime, series }: Props) => {
   if (countdown <= 0) {
     return (
       <div className="flex items-center gap-2">
-        <h2 className="font-bold text-lg">LIVE</h2>
+        <h2 className="font-bold">LIVE</h2>
         <div className="relative size-2">
           <div className={`animate-ping absolute h-full w-full rounded-full ${SERIES_CONFIG[series].colours}`} />
           <div className={`relative rounded-full h-full ${SERIES_CONFIG[series].colours}`} />
@@ -39,14 +39,14 @@ const Countdown = ({ startTime, series }: Props) => {
 
   let time
   if (countdown > MILLISECONDS_IN_DAY) {
-    time = <span className="text-lg font-bold">{duration.humanize()}</span>
+    time = <span className="text-base font-bold">{duration.humanize()}</span>
   } else {
     const hours = duration.hours()
     const minutes = Math.ceil(hours > 0 ? duration.minutes() : duration.asMinutes())
-    time = <span className="text-lg font-bold">{hours > 0 && <span>{hours}<span className="text-sm">HR</span></span>} {minutes}<span className="text-sm">MIN</span></span>
+    time = <span className="text-base font-bold">{hours > 0 && <span>{hours}<span className="text-xs">HR</span></span>} {minutes}<span className="text-xs">MIN</span></span>
   }
 
-  return <h2>Starts in {time}</h2>
+  return <h2 className="text-sm">Starts in {time}</h2>
 }
 
 export default Countdown
