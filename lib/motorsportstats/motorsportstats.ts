@@ -43,7 +43,7 @@ const toEvent = (event: EventResponse, series: SupportedSeries, getSessionType: 
     sessions: hasSessions ? getSessions(processSessions(event.sessions), getSessionType) : [],
     provisional: !hasSessions,
     series,
-    raceDate: isoFromUnix(event.endTimeUtc)
+    raceDate: isoFromUnix(event.endDate)
   }
 }
 

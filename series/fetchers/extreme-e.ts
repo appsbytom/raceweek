@@ -16,8 +16,8 @@ export default () => getSeriesEvents(Series.ExtremeE, getSessionType, sessions =
     const firstEventSessions = sessions.slice(0, firstRaceIndex)
     const secondEventSessions = sessions.slice(firstRaceIndex)
     return [
-      { ...event, sessions: firstEventSessions, endTimeUtc: firstEventSessions.at(-1).endTimeUtc },
-      { ...event, uuid: `${event.uuid}-2`, name: `${event.name} 2`, sessions: secondEventSessions, endTimeUtc: secondEventSessions.at(-1).endTimeUtc }]
+      { ...event, sessions: firstEventSessions, endDate: firstEventSessions.at(-1).endTimeUtc },
+      { ...event, uuid: `${event.uuid}-2`, name: `${event.name} 2`, sessions: secondEventSessions, endDate: secondEventSessions.at(-1).endTimeUtc }]
   } else {
     return { ...event, sessions }
   }
