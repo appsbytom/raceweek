@@ -1,5 +1,6 @@
 import { Series, SeriesMap } from '@/series/config'
 import Event from '@/types/event'
+import partition from '@/utils/partition'
 import btcc from './fetchers/btcc'
 import extremeE from './fetchers/extreme-e'
 import f1Academy from './fetchers/f1-academy'
@@ -20,6 +21,7 @@ const SERIES_FETCHER_CONFIG: SeriesMap<() => Promise<Event[]>> = {
   [Series.F1Academy]: f1Academy
 }
 
-export const getAllEvents = async (): Promise<Event[]> => {
-  return (await Promise.all(Object.values(SERIES_FETCHER_CONFIG).map(value => value()))).flat()
+export const getAllEvents = async (): Promise<Event[][]> => {
+  const events = (await Promise.all(Object.values(SERIES_FETCHER_CONFIG).map(value => value()))).flat()
+  return partition(events, event => event.provisional || event.sessions.some(session => !session.endTime))
 }

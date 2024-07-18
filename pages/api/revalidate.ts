@@ -10,10 +10,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const [_, events] = await Promise.all([res.revalidate('/'), getAllEvents(), prisma.sessionReminder.deleteMany({})])
+    const [_, [, confirmedEvents]] = await Promise.all([res.revalidate('/'), getAllEvents(), prisma.sessionReminder.deleteMany({})])
     await prisma.sessionReminder.createMany({
-      data: events
-        .filter(event => !event.provisional)
+      data: confirmedEvents
         .flatMap(event => event.sessions
           .filter(session => !session.unconfirmed && dayjs(session.startTime).isAfter(dayjs()))
           .map(session => {

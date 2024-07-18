@@ -8,7 +8,6 @@ import Event from '@/types/event'
 import { Type } from '@/types/session'
 import { GroupedSession } from '@/types/week'
 import { getWeeks } from '@/utils/grouping'
-import partition from '@/utils/partition'
 import dayjs from 'dayjs'
 import { GetStaticProps } from 'next'
 import { useSession } from 'next-auth/react'
@@ -23,8 +22,7 @@ type Props = {
 const getRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const events = await getAllEvents()
-  const [provisionalEvents, confirmedEvents] = partition(events, event => event.provisional)
+  const [provisionalEvents, confirmedEvents] = await getAllEvents()
 
   const sessions = confirmedEvents
     .filter(event => dayjs(event.sessions[event.sessions.length - 1].endTime).isSameOrAfter(dayjs()))
