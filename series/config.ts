@@ -6,7 +6,8 @@ export enum Series {
   BTCC = 'btcc',
   ExtremeE = 'extreme-e',
   IndyCar = 'indycar',
-  F1Academy = 'f1-academy'
+  F1Academy = 'f1-academy',
+  WRX = 'wrx'
 }
 
 const SERIES_CONFIG: SeriesMap<SeriesInfo> = {
@@ -41,6 +42,10 @@ const SERIES_CONFIG: SeriesMap<SeriesInfo> = {
   [Series.F1Academy]: {
     name: 'F1 Academy',
     colours: 'bg-gradient-to-r from-[#09f4f9] to-[#be117e]'
+  },
+  [Series.WRX]: {
+    name: 'World RX',
+    colours: 'bg-gradient-to-r from-[#202a44] to-[#02f3e9]'
   }
 }
 

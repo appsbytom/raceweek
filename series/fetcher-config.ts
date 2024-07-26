@@ -9,6 +9,7 @@ import f2 from './fetchers/f2'
 import f3 from './fetchers/f3'
 import fe from './fetchers/fe'
 import indycar from './fetchers/indycar'
+import wrx from './fetchers/wrx'
 
 const SERIES_FETCHER_CONFIG: SeriesMap<() => Promise<Event[]>> = {
   [Series.F1]: f1,
@@ -18,7 +19,8 @@ const SERIES_FETCHER_CONFIG: SeriesMap<() => Promise<Event[]>> = {
   [Series.BTCC]: btcc,
   [Series.ExtremeE]: extremeE,
   [Series.IndyCar]: indycar,
-  [Series.F1Academy]: f1Academy
+  [Series.F1Academy]: f1Academy,
+  [Series.WRX]: wrx
 }
 
 export const getAllEvents = async (): Promise<Event[][]> => {
