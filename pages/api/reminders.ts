@@ -4,10 +4,18 @@ import dayjs from 'dayjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const reminders = await prisma.sessionReminder.findMany({ where: { scheduledFor: { lte: dayjs().unix() } } })
+  const now = dayjs()
+  const reminders = await prisma.sessionReminder.findMany({
+    where: {
+      scheduledFor: {
+        lte: now.unix(),
+        gte: now.subtract(5, 'minutes').unix()
+      }
+    }
+  })
 
   if (reminders.length === 0) {
-    return res.json({ success: true, message: 'No reminders to send' })
+    return res.send('No reminders to send')
   }
   await Promise.all([
     messaging.sendEach(reminders.map(reminder => ({
@@ -22,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }))),
     prisma.sessionReminder.deleteMany({ where: { id: { in: reminders.map(reminder => reminder.id) } } })
   ])
-  res.json({ success: true })
+  res.status(200).end()
 }
 
 export default handler
