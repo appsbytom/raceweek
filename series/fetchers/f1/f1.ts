@@ -37,11 +37,11 @@ const sessionMap = {
 }
 
 const getSessions = async (id): Promise<Session[]> => {
-  const { data } = await client.get<SessionsResponse>('/fom-results/timetables', { params: { meeting: id }})
+  const { data } = await client.get<SessionsResponse>(`/event-tracker/meeting/${id}`)
 
-  if (data.timetables.some(session => session.startTime === 'TBC' || session.endTime === 'TBC')) return []
+  if (data.meetingContext.timetables.some(session => session.startTime === 'TBC' || session.endTime === 'TBC')) return []
 
-  return data.timetables
+  return data.meetingContext.timetables
     .sort((a, b) => Number(new Date(a.startTime)) - Number(new Date(b.startTime)))
     .map(session => ({
       id: `${id}-${session.session}`,

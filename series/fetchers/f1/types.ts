@@ -11,7 +11,9 @@ type EventResponse = {
 }
 
 export type SessionsResponse = {
-  timetables: SessionResponse[]
+  meetingContext: {
+    timetables: SessionResponse[]
+  }
 }
 
 type SessionResponse = {

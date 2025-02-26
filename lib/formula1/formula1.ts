@@ -15,7 +15,10 @@ const SERIES_MAP: { [key in SupportedSeries]: string } = {
   [Series.F1Academy]: process.env.F1_ACADEMY_KEY
 }
 
-export const createClient = (series: SupportedSeries) => axios.create({ baseURL: 'https://api.formula1.com/v1', headers: { apikey: SERIES_MAP[series] }})
+export const createClient = (series: SupportedSeries) => axios.create({
+  baseURL: 'https://api.formula1.com/v1',
+  headers: { apikey: SERIES_MAP[series], Locale: 'en', Origin: 'https://www.formula1.com', Referer: 'https://www.formula1.com' }
+})
 
 const sessionMap = {
   PRACTICE: Type.Practice,
