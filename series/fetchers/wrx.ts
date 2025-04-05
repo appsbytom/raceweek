@@ -11,15 +11,18 @@ const getSessionType = (guid: string) => {
 export default async (): Promise<Event[]> => {
   const { content } = await (await fetch(`https://api.rally.tv/content/filters/calendar?championship=wrx&year=${dayjs().year()}`)).json()
   return await Promise.all(content.map(async event => {
-    const { content: sessionContent } = await (await fetch(`https://api.rally.tv/content/filters/schedule?byListingTime=${event.startDate}~${event.endDate}&seriesUid=${event.seriesUid}`)).json()
-    const sessions = sessionContent.filter(session => /_rx[a-z]{1}/.test(session.contentGuid)).map(session => ({
-      id: session.uid,
-      name: session.title.replace('World RX', ''),
-      type: getSessionType(session.contentGuid),
-      startTime: dayjs(session.availableOn).toISOString(),
-      endTime: dayjs(session.availableTill).toISOString(),
-      unconfirmed: false,
-    }))
+    let sessions = []
+    if (event.seriesUid) {
+      const { content: sessionContent } = await (await fetch(`https://api.rally.tv/content/filters/schedule?byListingTime=${event.startDate}~${event.endDate}&seriesUid=${event.seriesUid}`)).json()
+      sessions = sessionContent.filter(session => /_rx[a-z]{1}/.test(session.contentGuid)).map(session => ({
+        id: session.uid,
+        name: session.title.replace('World RX', ''),
+        type: getSessionType(session.contentGuid),
+        startTime: dayjs(session.availableOn).toISOString(),
+        endTime: dayjs(session.availableTill).toISOString(),
+        unconfirmed: false,
+      }))
+    }
     return {
       id: event.uid,
       name: event.title,
