@@ -1,0 +1,10 @@
+name: Reminders
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '* * * * *'
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl https://raceweek.vercel.app/api/reminders
