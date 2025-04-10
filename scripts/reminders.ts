@@ -1,9 +1,8 @@
 import { messaging } from '@/lib/firebase-admin'
 import prisma from '@/lib/prisma'
 import dayjs from 'dayjs'
-import { NextApiRequest, NextApiResponse } from 'next'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+(async () => {
   const now = dayjs()
   try {
     const reminders = await prisma.sessionReminder.findMany({
@@ -16,7 +15,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     if (reminders.length === 0) {
-      return res.send('No reminders to send')
+      console.log('No reminders to send')
+      return
     }
     await Promise.all([
       messaging.sendEach(reminders.map(reminder => ({
@@ -31,11 +31,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }))),
       prisma.sessionReminder.deleteMany({ where: { id: { in: reminders.map(reminder => reminder.id) } } })
     ])
-    res.status(200).end()
+    console.log('Reminders sent')
   } catch (e) {
     console.error(`Failed to send reminders: ${e}`)
-    res.status(500).send(e.message)
   }
-}
-
-export default handler
+})()
