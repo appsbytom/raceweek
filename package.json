@@ -19,7 +19,7 @@
     "@vercel/speed-insights": "^1.0.2",
     "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.12",
-    "classnames": "^2.3.2",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "dotenv": "^16.0.3",
     "firebase": "^10.9.0",
