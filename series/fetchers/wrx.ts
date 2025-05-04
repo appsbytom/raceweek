@@ -10,7 +10,7 @@ const getSessionType = (guid: string) => {
 
 export default async (): Promise<Event[]> => {
   const { content } = await (await fetch(`https://api.rally.tv/content/filters/calendar?championship=wrx&year=${dayjs().year()}`)).json()
-  return await Promise.all(content.map(async event => {
+  return await Promise.all(content.filter(event => event.startDate).map(async event => {
     let sessions = []
     if (event.seriesUid) {
       const { content: sessionContent } = await (await fetch(`https://api.rally.tv/content/filters/schedule?byListingTime=${event.startDate}~${event.endDate}&seriesUid=${event.seriesUid}`)).json()
