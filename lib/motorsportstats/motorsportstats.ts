@@ -18,13 +18,14 @@ const CLIENT = axios.create({
   headers: { origin: 'https://widgets.motorsportstats.com', 'x-parent-referer': 'https://motorsportstats.com/' }
 })
 
-type SupportedSeries = Series.FE | Series.BTCC | Series.ExtremeE | Series.IndyCar
+type SupportedSeries = Series.FE | Series.BTCC | Series.ExtremeE | Series.IndyCar | Series.WRX
 
 const SERIES_MAP: { [key in SupportedSeries]: string } = {
   [Series.FE]: '7415d1ab-c31d-49dd-9143-1e7e33bff889',
   [Series.BTCC]: 'ee00e922-a28b-4a8e-ae84-597af14ed931',
   [Series.ExtremeE]: 'a4373eb9-8102-48fd-a11f-215a2ce662c1',
-  [Series.IndyCar]: '220b82cb-7fdb-46df-b8f8-d180118aa605'
+  [Series.IndyCar]: '220b82cb-7fdb-46df-b8f8-d180118aa605',
+  [Series.WRX]: '100ef87b-99ad-478d-aeef-1dd4038379be'
 }
 
 const getCurrentSeason = async (series: SupportedSeries): Promise<Season> => {
@@ -33,7 +34,7 @@ const getCurrentSeason = async (series: SupportedSeries): Promise<Season> => {
   return data.find(season => season.status === 'Current')
 }
 
-const isoFromUnix = (unix: number) => dayjs.unix(unix).toISOString()
+const isoFromUnix = (unix: number) => unix ? dayjs.unix(unix).toISOString() : ''
 
 const toEvent = (event: EventResponse, series: SupportedSeries, getSessionType: GetSessionType, processSessions: ProcessSessions): Event => {
   const hasSessions = event.sessions.length > 0
