@@ -1,12 +1,25 @@
-import { getSeriesEvents } from '@/lib/motorsportstats/motorsportstats'
+import prisma from '@/lib/prisma'
 import Event from '@/types/event'
 import { Type } from '@/types/session'
 import { Series } from '../config'
 
-const getSessionType = (sessionCode: string) => {
-  if (/^P\d*$/.test(sessionCode)) return Type.Practice
-  else if (/^QH\d*$/.test(sessionCode)) return Type.Qualifying
-  else if (/^SF \d*$/.test(sessionCode)) return Type.Race
+const sessionMap = {
+  p: Type.Practice,
+  q: Type.Qualifying,
+  r: Type.Race
 }
 
-export default async (): Promise<Event[]> => getSeriesEvents(Series.WRX, getSessionType)
+export default async (): Promise<Event[]> => {
+  const events = await prisma.event.findMany({ where: { series: Series.WRX }, include: { sessions: true }});
+  return events.map(event => ({
+    ...event,
+    sessions: event.sessions.map(session => ({
+      ...session,
+      type: sessionMap[session.type],
+      startTime: session.startTime.toISOString(),
+      endTime: session.endTime.toISOString()
+    })),
+    series: Series.WRX,
+    raceDate: event.raceDate.toISOString()
+  }))
+}
