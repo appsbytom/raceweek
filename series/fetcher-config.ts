@@ -15,7 +15,7 @@ const SERIES_FETCHER_CONFIG: SeriesMap<() => Promise<Event[]>> = {
   [Series.BTCC]: () => getEvents(Series.BTCC),
   [Series.ExtremeE]: extremeE,
   [Series.IndyCar]: () => getEvents(Series.IndyCar),
-  [Series.F1Academy]: () => getEvents(Series.F1Academy),
+  [Series.F1Academy]: () => getSeriesEvents(Series.F1Academy),
   [Series.WRX]: () => getEvents(Series.WRX),
 }
 
