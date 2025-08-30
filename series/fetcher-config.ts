@@ -1,26 +1,22 @@
+import { getSeriesEvents } from '@/lib/formula1/formula1'
+import { getEvents } from './fetchers/db'
 import { Series, SeriesMap } from '@/series/config'
 import Event from '@/types/event'
 import partition from '@/utils/partition'
-import btcc from './fetchers/btcc'
 import extremeE from './fetchers/extreme-e'
-import f1Academy from './fetchers/f1-academy'
 import f1 from './fetchers/f1/f1'
-import f2 from './fetchers/f2'
-import f3 from './fetchers/f3'
 import fe from './fetchers/fe'
-import indycar from './fetchers/indycar'
-import wrx from './fetchers/wrx'
 
 const SERIES_FETCHER_CONFIG: SeriesMap<() => Promise<Event[]>> = {
   [Series.F1]: f1,
-  [Series.F2]: f2,
-  [Series.F3]: f3,
+  [Series.F2]: () => getSeriesEvents(Series.F2),
+  [Series.F3]: () => getSeriesEvents(Series.F3),
   [Series.FE]: fe,
-  [Series.BTCC]: btcc,
+  [Series.BTCC]: () => getEvents(Series.BTCC),
   [Series.ExtremeE]: extremeE,
-  [Series.IndyCar]: indycar,
-  [Series.F1Academy]: f1Academy,
-  [Series.WRX]: wrx
+  [Series.IndyCar]: () => getEvents(Series.IndyCar),
+  [Series.F1Academy]: () => getEvents(Series.F1Academy),
+  [Series.WRX]: () => getEvents(Series.WRX),
 }
 
 export const getAllEvents = async (): Promise<Event[][]> => {

@@ -9,8 +9,8 @@ const sessionMap = {
   r: Type.Race
 }
 
-export default async (): Promise<Event[]> => {
-  const events = await prisma.event.findMany({ where: { series: Series.WRX }, include: { sessions: true }});
+export const getEvents = async (series: Series): Promise<Event[]> => {
+  const events = await prisma.event.findMany({ where: { series }, include: { sessions: true }});
   return events.map(event => ({
     ...event,
     sessions: event.sessions.map(session => ({
@@ -19,7 +19,7 @@ export default async (): Promise<Event[]> => {
       startTime: session.startTime.toISOString(),
       endTime: session.endTime.toISOString()
     })),
-    series: Series.WRX,
+    series: series,
     raceDate: event.raceDate.toISOString()
   }))
 }
